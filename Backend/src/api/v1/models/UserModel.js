@@ -23,10 +23,14 @@ const UserSchema = new mongoose.Schema({
 
     status: { type: Boolean, required: true, default: false },
 
+    resetPasswordToken : String,
+    
+    resetPasswordTokenTime : String
+
 }, { timestamps: true })
 
 
 //Modal to which collection form we save the data
-const UserModel = mongoose.model('Modal', UserSchema)
+const UserModel = mongoose.model('User', UserSchema)
 
 module.exports = UserModel

@@ -3,7 +3,10 @@ const bcrypt = require('bcryptjs'); //Convert password into hash
 const jwt = require('jsonwebtoken'); // Tokenized our users
 const UserModel = require('../models/UserModel'); //User modal
 
-const {JWT_SECRET_KEY} = require('../../config/config');
+const crypto = require('crypto'); //Use to ciper the tokens 
+
+const {JWT_SECRET_KEY, FRONTEND_URL} = require('../../config/config');
+const SendMail = require('../utils/SendMail');
 
 //------------------ Creating the AuthControllers to authenticate the users -----------X
 function AuthController() {
@@ -82,7 +85,126 @@ function AuthController() {
                 return res.status(200).json({success:true,msg:'User found successfully',user});
 
             } catch (error) { return res.status(500).json({success:true,msg:`${error.message}` });  }
+        },
+
+        //4. Change Password ,if user write old password is right!, using PUT '/api/user/changePassword'
+        async changePassword(req,res){
+            try {
+                //1. Get constraint from req.body
+                const {oldPassword, newPassword} = req.body;
+
+                if(!oldPassword || !newPassword) return res.status(404).json({success:false,msg:'All fields are required'})
+
+                //Check old password is match with req.userId
+                const user = await UserModel.findOne({_id:req.userId});
+                
+                if(!user) return res.status(404).json({success:false,msg:'User is not found,Please check credentials'});
+
+                const isMatch = bcrypt.compare(oldPassword,user.password);
+                if(!isMatch) return res.status(401).json({success:false,msg:"Your old password is not right"})
+
+                user.password = bcrypt.hash(newPassword,10);
+
+                await user.save();
+
+                return res.status(200).json({success:true,msg:'Your password is change successfully',user});
+
+            } catch (error) { return res.status(500).json({success:true,msg:`${error.message}` });  }
+        },
+
+        // Updating the profile by the user, using PUT '/api/user/updateProfile'
+        async updateProfile(req,res){
+            try {
+                //Get constraints from req.body
+                const {name,email} = req.body;
+
+                //Here user can change the profile
+
+                //Find the user by the userId
+                let user = await UserModel.findById(req.userId);
+
+                if(!user) return res.status(404).json({success:false,msg:'User is not found,Please check credentials'});
+
+                //Now update the data
+                if(email) user.email = email;
+                if(name) user.name = name;
+
+                await user.save();
+
+            } catch (error) { return res.status(500).json({success:true,msg:`${error.message}` });  }
+        },
+
+        //Forget password, is help the users when they try to login , using POST '/api/user/forgetPassword'
+        async forgetPassword(req,res){
+
+            try {
+                //Get constraints from the users
+                const {email} = req.body;
+
+                //Find the user by the id
+                const user = await UserModel.findOne({email});
+
+                if(!user) return res.status(404).json({success:false,msg:'User is not found,Please check credentials'});
+
+
+                //After the user found send the mail, with token and reset password token 
+                //1. Create the token 
+                const resetToken = crypto.randomBytes(20).toString('hex'); //hex the token is built in
+
+                //2. Hash the user reset token and update
+                user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+                console.log('check reset tokens ',user.resetPasswordToken,resetToken);
+
+                //3. Define the time to reset the token
+                user.resetPasswordTokenTime = Date.now()+15*60*60*1000; //15 minutes;
+
+
+                //---------------- Now we move to send the mail
+                const FrontendUrl = process.env.FRONTEND_URL || FRONTEND_URL;
+                const url = `${FrontendUrl}/resetPassword/${resetToken}`;
+
+                const msg = `Click on ${url} to reset your password, if you haven't send, then please ignore this`;
+
+                //Send the mail
+                await SendMail(user.email,'Coursera reset password',msg);
+
+                return res.status(200).json({success:true,msg:`Check ${user.email} to reset password`})
+
+            } catch (error) { return res.status(500).json({success:true,msg:`${error.message}` });  }
+        },
+
+        //After click on reset token, we reset the password, using POST '/api/user/resetPassword/:token'
+        async resetPassword(req,res){
+            try {
+                //Get the constraints from the user
+                const {password,cpassword} = req.body;
+
+                if(password !== cpassword) return res.status(404).json({success:false,msg:'Your password and confirm password not match'})
+
+                //Get the constraints from params, to verify user
+                let {token} = req.params;
+
+                token = crypto.createHash('sha256').update(token).digest('hex');
+
+                //Find the user in according of the token 
+                let user = await UserModel.find({resetPasswordToken:token,resetPasswordTokenTime : { $lt : Date.now() } });
+
+                console.log('reset password user is ',user);
+
+                if(!user) return res.status(401).json({success:false,msg:'Token is expires or user is not found'});
+
+                //After finding update the password or can say hash the password
+                user.password = await bcrypt.hash(password,10);
+
+                await user.save();
+
+                return res.status(200).json({success:true,msg:'Your password is reset successfully',user});
+
+            } catch (error) { return res.status(500).json({success:true,msg:`${error.message}` });  }
         }
+
+
     }
 }
 
