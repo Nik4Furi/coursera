@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
                 if (!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value)))
                     throw new Error(`{VALUE} is not valid email`)
             }
-        }
+        },unique:true
     },
 
     password: { type: String, required: true, minlength: [8, "Password must be 8 char long "], maxlength: [120, "Password mustn't 120 char long"] },

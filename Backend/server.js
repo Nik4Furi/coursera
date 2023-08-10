@@ -48,6 +48,11 @@ if(Version === 'v1'){
     //Playlist Routes
     const PlaylistRoutes = require('./src/api/v1/routers/PlaylistRoutes') 
     app.use('/api/playlist',PlaylistRoutes) 
+
+
+    //Admin Routes
+    const AdminRoutes = require('./src/api/v1/routers/AdminRoutes') 
+    app.use('/api/admin',AdminRoutes) 
 }
 
 const Server = process.env.SERVER || SERVER;

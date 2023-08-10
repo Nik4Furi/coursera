@@ -5,8 +5,11 @@ const UserModel = require('../models/UserModel'); //User modal
 
 const crypto = require('crypto'); //Use to ciper the tokens 
 
+const cloudinary = require('cloudinary'); //To upload files--
+
 const {JWT_SECRET_KEY, FRONTEND_URL} = require('../../config/config');
 const SendMail = require('../utils/SendMail');
+const getDataUri = require('../utils/DataUri');
 
 //------------------ Creating the AuthControllers to authenticate the users -----------X
 function AuthController() {
@@ -22,7 +25,7 @@ function AuthController() {
                 if(!name || !email || !password || !cpassword) {return res.status(404).json({success:false,msg:"All fields are required"})};
 
                 if(password.length < 8 || cpassword.length < 8) 
-                    return res.status(404).json({success:false,msg:"Password must be 8 char long"})
+                    return res.status(404).json({success:false,msg:"Password & Confirm password must be 8 char long"})
 
                 //check password and confirm password match
                 if(password !== cpassword) {return res.status(404).json({success:false,msg:"Password and ConfrimPassword did not match"})};
@@ -31,6 +34,13 @@ function AuthController() {
                 let users = await UserModel.findOne({email})
                 if(users) { return res.status(401).json({success:false,msg:"this crenditentals's user is already exist"})};
 
+                //Upload profile pictures
+                const file = req.file;
+
+                const fileUri = await getDataUri(file);
+
+                const myCloud = await cloudinary.v2.uploader.upload(fileUri.content);
+
                 //Converting the password into hash
                 let hashPassword = await bcrypt.hash(password,10);
 
@@ -38,7 +48,10 @@ function AuthController() {
                 users = await UserModel({
                     name,
                     email,
-                    password:hashPassword,                    
+                    password:hashPassword,   
+                    avatar:{
+                        public_id:myCloud.public_id, url:myCloud.secure_url
+                    }                 
                 })
                 await users.save();
 
@@ -114,6 +127,31 @@ function AuthController() {
                 //Now update the data
                 if(email) req.user.email = email;
                 if(name) req.user.name = name;
+
+                await req.user.save();
+
+                return res.status(200).json({success:true,msg:'Your profile is updated successfully',user:req.user})
+
+            } catch (error) { return res.status(500).json({success:true,msg:`${error.message}` });  }
+        },
+
+        // Updating the profile picture by the user, using PUT '/api/user/updatePicture'
+        async updatePicture(req,res){
+            try {
+                //We delete old profile picture
+                if(user.avatar.public_id)
+                    await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+
+                
+                const file = req.file;
+
+                const fileUri = await getDataUri(file);
+
+                const myCloud = await cloudinary.v2.uploader.upload(fileUri.content);
+
+                req.user.avatar = {
+                    public_id:myCloud.public_id, url:myCloud.secure_url
+                }
 
                 await req.user.save();
 
