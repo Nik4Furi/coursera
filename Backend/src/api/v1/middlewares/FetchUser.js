@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken"); // For verify the users
 
 const { JWT_SECRET_KEY } = require( "../../config/config"); //backup key to use 
 
+const UserModel = require("../models/UserModel"); //User model to find the user
+
 //--------- Fetch user help us, to find the token of the login users
 
 const FetchUser = async (req, res, next) => {
@@ -14,11 +16,17 @@ const FetchUser = async (req, res, next) => {
         const Secret_Key = process.env.JWT_SECRET_KEY || JWT_SECRET_KEY;
         const users = await jwt.verify(token, Secret_Key);
 
-        req.userId = users.user.id;
+        // console.log('check users ',users);
+        
+        //Find the user by the id
+        const userFind = await UserModel.findById(users.user.id);
+        if(!userFind) return res.status(404).json({success:false,msg:'User not found'});
+
+        req.user = userFind;
 
         next();
 
     } catch (error) { return res.status(500).json({ success: false, msg: error.message }); }
 }
 
-module.exports = FetchUser
+module.exports = FetchUser;

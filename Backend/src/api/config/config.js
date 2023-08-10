@@ -17,4 +17,10 @@ let SMTP_HOST = "<Host>"
 let SMTP_PORT = "<Port>"
 let SMTP_AUTH_USER = "<User>"
 let SMTP_AUTH_PASS = "<Pass>"
-module.exports = { SERVER, PORT, MONGO_URI, JWT_SECRET_KEY, VERSION, FRONTEND_URL };
+
+// # Cloudinary Configuration
+let CLOUDINARY_NAME = '<name>'
+let CLOUDINARY_API_KEY = '<api_key>'
+let CLOUDINARY_API_SECRET = '<api_secret>'
+
+module.exports = { SERVER, PORT, MONGO_URI, JWT_SECRET_KEY, VERSION, FRONTEND_URL, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_NAME };

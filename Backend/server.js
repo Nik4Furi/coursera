@@ -11,6 +11,17 @@ const app = express();
 // const cors = require('cors'); //When your app's api connect with the forntend applications
 // app.use(cors())
 
+//------------------ Configuring the Cloudinary to upload poster and videos
+const cloudinary = require('cloudinary');
+
+cloudinary.v2.config({
+    cloud_name:process.env.CLOUDINARY_NAME , 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET
+})
+          
+
+
 //When use your app any json object or form fill up
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
@@ -25,9 +36,18 @@ const Version = process.env.VERSION || VERSION ;
 if(Version === 'v1'){
     console.log('coursera v1');
     
-    const routers = require('./src/api/v1/routers') //Connect your routes here
+    //--------------------- Routes ---------------------X
+    //Auth Routes
+    const AuthRoutes = require('./src/api/v1/routers/AuthRoutes') 
+    app.use('/api/user',AuthRoutes) 
 
-    app.use('/api',routers) //Can define path or respose of your apis path
+    //Course Routes
+    const CourseRoutes = require('./src/api/v1/routers/CourseRoutes') 
+    app.use('/api/course',CourseRoutes) 
+
+    //Playlist Routes
+    const PlaylistRoutes = require('./src/api/v1/routers/PlaylistRoutes') 
+    app.use('/api/playlist',PlaylistRoutes) 
 }
 
 const Server = process.env.SERVER || SERVER;

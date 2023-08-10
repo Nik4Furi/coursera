@@ -69,8 +69,8 @@ function AuthController() {
                     user : {id : users._id}
                 }
                 const Secret_Key = process.env.JWT_SECRET_KEY || JWT_SECRET_KEY
-                const token = await jwt.sign(payloads,Secret_Key)
-                // console.log(tokenize);
+                const token = await jwt.sign(payloads,Secret_Key,{expiresIn : '10d'})
+                
                 return res.status(200).json({success:true,msg:'You are successfully login',token});
                 
             } catch (error) { return res.status(500).json({success:true,msg:`${error.message}` });  }
@@ -79,10 +79,8 @@ function AuthController() {
         //3. Get the info of login user, using GET '/api/user/getUser'
         async getUser(req,res){
             try {
-                let user = await UserModel.findById(req.userId).select('-password');
-                if(!user) return res.status(404).json({success:true,msg:'No user found'})
-
-                return res.status(200).json({success:true,msg:'User found successfully',user});
+                // console.log(req.user);
+                return res.status(200).json({success:true,msg:'User found successfully',user:req.user});
 
             } catch (error) { return res.status(500).json({success:true,msg:`${error.message}` });  }
         },
@@ -95,19 +93,14 @@ function AuthController() {
 
                 if(!oldPassword || !newPassword) return res.status(404).json({success:false,msg:'All fields are required'})
 
-                //Check old password is match with req.userId
-                const user = await UserModel.findOne({_id:req.userId});
-                
-                if(!user) return res.status(404).json({success:false,msg:'User is not found,Please check credentials'});
-
-                const isMatch = bcrypt.compare(oldPassword,user.password);
+                const isMatch = bcrypt.compare(oldPassword,req.user.password);
                 if(!isMatch) return res.status(401).json({success:false,msg:"Your old password is not right"})
 
-                user.password = bcrypt.hash(newPassword,10);
+                req.user.password = await bcrypt.hash(newPassword,10);
 
-                await user.save();
+                await req.user.save();
 
-                return res.status(200).json({success:true,msg:'Your password is change successfully',user});
+                return res.status(200).json({success:true,msg:'Your password is change successfully',user:req.user});
 
             } catch (error) { return res.status(500).json({success:true,msg:`${error.message}` });  }
         },
@@ -118,18 +111,13 @@ function AuthController() {
                 //Get constraints from req.body
                 const {name,email} = req.body;
 
-                //Here user can change the profile
-
-                //Find the user by the userId
-                let user = await UserModel.findById(req.userId);
-
-                if(!user) return res.status(404).json({success:false,msg:'User is not found,Please check credentials'});
-
                 //Now update the data
-                if(email) user.email = email;
-                if(name) user.name = name;
+                if(email) req.user.email = email;
+                if(name) req.user.name = name;
 
-                await user.save();
+                await req.user.save();
+
+                return res.status(200).json({success:true,msg:'Your profile is updated successfully',user:req.user})
 
             } catch (error) { return res.status(500).json({success:true,msg:`${error.message}` });  }
         },
@@ -145,7 +133,6 @@ function AuthController() {
                 const user = await UserModel.findOne({email});
 
                 if(!user) return res.status(404).json({success:false,msg:'User is not found,Please check credentials'});
-
 
                 //After the user found send the mail, with token and reset password token 
                 //1. Create the token 

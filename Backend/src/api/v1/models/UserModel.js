@@ -25,7 +25,12 @@ const UserSchema = new mongoose.Schema({
 
     resetPasswordToken : String,
     
-    resetPasswordTokenTime : String
+    resetPasswordTokenTime : String,
+
+    playlist : [{
+        lecture_id: String,
+        playlistLength : Number
+    }]
 
 }, { timestamps: true })
 
