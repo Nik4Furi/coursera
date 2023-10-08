@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { CoursesCategories } = require('../utils/AttributesTypes');
 
 //------------------ User schema to store the users ---------
 const CourseSchema = new mongoose.Schema({
@@ -43,10 +44,7 @@ const CourseSchema = new mongoose.Schema({
 
     category: {
         type: String,
-        enum: {
-            values: ['webdevelopment', 'backend', 'frontend', 'appdevelopment', 'machinelearning', 'artificial intelligence'],
-            message: `{VALUE} is not support as a category of the course`
-        }
+        enum: CoursesCategories
     },
 
 

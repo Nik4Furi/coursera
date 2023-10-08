@@ -12,11 +12,11 @@ const getDataUri = (file) => {
         // console.log(file,"check file");
 
         let extName = path.extname(file.originalname).toString();
-        console.log(extName);
+        // console.log(extName);
 
         return parser.format(extName, file.buffer);
 
-    } catch (error) { throw new Error(error.message); }
+    } catch (error) { throw new Error(error); }
 }
 
 module.exports = getDataUri;

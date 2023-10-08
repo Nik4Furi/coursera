@@ -26,7 +26,7 @@ const FetchUser = async (req, res, next) => {
 
         next();
 
-    } catch (error) { return res.status(500).json({ success: false, msg: error.message }); }
+    } catch (error) { return res.status(500).json({ success: false, msg: error }); }
 }
 
 module.exports = FetchUser;

@@ -13,5 +13,6 @@ const AdminController = require('../controllers/AdminController');
 Routers.get('/fetchAllUsers',FetchUser,CheckRole,AdminController().fetchAllUsers); //fetch all the users, using GET '/api/admin/fetchAllUsers'
 Routers.put('/updateUserProfile/:id',FetchUser,CheckRole,AdminController().updateUserProfile); //Update the user profile like role etc, using PUT '/api/admin/updateUserProfile'
 Routers.delete('/deleteUser/:id',FetchUser,CheckRole,AdminController().deleteUser); //Delete the user, using DELETE '/api/admin/deleteUser'
+Routers.get('/stats',FetchUser,CheckRole,AdminController().State); //Function to show all the details in form of stats, using GET '/api/admin/stats'
 
 module.exports = Routers

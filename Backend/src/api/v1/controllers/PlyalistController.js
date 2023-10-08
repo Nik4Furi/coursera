@@ -1,4 +1,5 @@
 //------------------------- Model Specific Stuff -----------------------X
+const CourseModal = require("../models/CourseModel");
 const UserModel = require("../models/UserModel");
 
 //------------------- Controlling the logic of the course specific -----------------X
@@ -7,69 +8,48 @@ function PlaylistController() {
         // Fetch all the coureses, using GET '/api/course/fetchAll'
         async fetchPlaylist(req, res) {
             try {
+                if (req.user.playlist.length === 0) return res.status(200).json({ success: true, msg: 'At a time no lecture is available in your playlist' })
 
-                //1. Find the users by the id
-                const user = await UserModel.findById(req.userId);
-                if (!user)
-                    return res.status(404).json({ success: false, msg: 'User not found' });
-                console.log(user);
+                return res.status(200).json({ success: true, msg: 'Fetch the playlist videos of the user', playlist: req.user.playlist })
 
-
-                
-                // if (courses.length === 0) return res.status(200).json({ success: true, msg: 'At a time no course is available, please send request to add on' })
-
-                return res.status(200).json({ success: true, msg: 'Fetch the playlist videos of the user' })
-
-            } catch (error) { return res.status(500).json({ success: false, msg: error.message }) }
+            } catch (error) { return res.status(500).json({ success: false, msg: error }) }
         },
 
         //Add a new course, using POST '/api/course/add'
         async addToPlaylist(req, res) {
             try {
-                const { title, description,category } = req.body;
 
-                //Here the poster of the course
-                if(!title || !description || !category) return res.status(401).json({success:false,msg:'All fields are required'})
+                //First find the lectures is exist
+                const { id } = req.params;
+                const findLecture = await CourseModal.findOne({ 'lectures._id': id });
+                // const findLecture = await CourseModal.find({lectures : {'_id':req.params.id}})
 
-                //1. Find the users by the id
-                const user = await UserModel.findById(req.userId);
-                if (!user)
-                    return res.status(404).json({ success: false, msg: 'User not found' });
+                if (!findLecture) return res.status(404).json({ success: false, msg: 'Lecture is not found' });
 
-                let course = await CourseModel.create({
-                    title, description,category, created_by: user._id,
-                })
+                //Other wise add this lecture in playlist
+                req.user.playlist.push(id);
 
-                return res.status(200).json({ success: true, msg: 'Added a new course successfully', course });
+                await req.user.save();
 
-            } catch (error) { return res.status(500).json({ success: false, msg: error.message }) }
+                return res.status(200).json({ success: true, msg: 'Added a new lecture in your playlist' });
+
+            } catch (error) { return res.status(500).json({ success: false, msg: error }) }
         },
 
         //Remove a course, using DELETE '/api/course/removeCourse'
         async removeToPlaylist(req, res) {
             try {
-                const {id} = req.params;
+                const { id } = req.params;
 
-                //1. Find the users by the id
-                let user = await UserModel.findById(req.userId);
+                const removeToPlaylist = await UserModel.updateOne({ _id: req.user._id }, {
+                    $pull: {
+                        'playlist': id
+                    }
+                });
+                
+                return res.status(200).json({ success: true, msg: 'Remove the lecture from playlist' });
 
-                if (!user)
-                    return res.status(404).json({ success: false, msg: 'User not found' });
-
-                //Find the course by the id
-                let course = await CourseModel.deleteOne({_id:id});
-
-                if (!course)
-                    return res.status(404).json({ success: false, msg: 'Course not found' });
-
-                //Delet its lectures poster and video also delete poster of course
-                console.log(course);
-
-                const courses = await CourseModel.find();
-
-                return res.status(200).json({ success: true, msg: 'Remove the course successfully', length:courses.length});
-
-            } catch (error) { return res.status(500).json({ success: false, msg: error.message }) }
+            } catch (error) { return res.status(500).json({ success: false, msg: error }) }
         }
 
     }
