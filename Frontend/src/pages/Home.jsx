@@ -1,53 +1,70 @@
 import React from 'react'
 
-import { Text, Container, Heading, Stack, VStack, Button,Image, Box, HStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
+
+//Chakra UI Components
+import { Text, Container, Heading, Stack, VStack, Button, Image, Box, HStack } from '@chakra-ui/react'
 
 //-------------- Images/Icons Container----------------------X
 import Header from '../assets/images/header-3.webp'
-import {CgGoogle, CgYoutube} from 'react-icons/cg'
-import {SiCoursera, SiUdemy} from 'react-icons/si'
-import {DiAws} from 'react-icons/di'
+import { CgGoogle, CgYoutube } from 'react-icons/cg'
+import { SiCoursera, SiUdemy } from 'react-icons/si'
+import { DiAws } from 'react-icons/di'
+import TextHighlight from '../components/Layout/TextHighlight'
+import Buttons from '../components/Layout/Buttons'
+import CoursesContainer from '../components/Home/CoursesContainer'
 
 function Home() {
   return (
     <>
       <section id="Home">
-        <Container m={"7"} >
 
-        <Stack direction={["column","row"]} h={"100%"} justifyContent={["center","space-between"]} alignItems={"center"} spacing={["16","36"]}  >
-         
+        <Container maxW={'container.lg'} mt={'5'} >
 
-         <VStack w={"full"} alignItems={["center","flex-start"]} >
-          <Heading children="Welcome in coursera, make life in different way" />
-          <Text children="Finding the way to fulfill your life with satisfication of the content and yourselves" />
-          <Link to={'/courses'} >
-            <Button className='btn-primary' >Explore Courses</Button>
-          </Link>
-
-         </VStack>
-
-         <Image src={Header} boxSize={"sm"}/>
+          <Stack direction={["column", "row"]} h={'50vh'} >
 
 
-        </Stack>
+            <VStack >
+              <Heading> <TextHighlight title={'Coursera'} colorscheme='yellow' size='xl' /> , Kick Your Career Now  </Heading>
+              <Text>Here you find the coursee, which are mostly realted to the computer science branches, and we are provide the subscription options to checkout all the lectures, and that will lead your skills sets</Text>
+              <Text>Try our all courses list,Don't Wait 👇 </Text>
+
+              <Box >
+              <a href='#Courses' ><Buttons title='Explore Courses' /></a>
+              <Link to={'/login'}><Buttons title='Login' /></Link>
+              </Box>
+
+            </VStack>
+
+            <Box >
+              <Image src={Header} borderRadius='md' />
+            </Box>
+
+          </Stack>
+
+          {/* Here we show all the courses list to need to search  */}
+          <section>
+            <CoursesContainer />
+          </section>
 
         </Container>
 
-        <Box p={"8"} background={"blackAlpha.200"} >
+<section id="Brands">
+        <Box p={"8"} background={"blackAlpha.200"} textAlign={'center'} >
 
-      <Heading children="Our Brands Who Support Us" textAlign={"center"} />
+            <TextHighlight title={'Our Brands Who Support US'} as='h2' size='xl' />
 
-        <HStack justifyContent={"center"} >
+          <HStack justifyContent={"center"} my={'3'} >
 
-          <CgGoogle size={"50"} cursor={"pointer"} color='purple'  />
-          <CgYoutube size={"50"} cursor={"pointer"} color='purple' />
-          <DiAws size={"50"} cursor={"pointer"} color='purple' />
-          <SiCoursera size={"50"} cursor={"pointer"} color='purple' />
-          <SiUdemy size={"50"} cursor={"pointer"} color='purple' />
-        </HStack>
+            <CgGoogle size={"30"} cursor={"pointer"} color='purple' />
+            <CgYoutube size={"30"} cursor={"pointer"} color='purple' />
+            <DiAws size={"30"} cursor={"pointer"} color='purple' />
+            <SiCoursera size={"30"} cursor={"pointer"} color='purple' />
+            <SiUdemy size={"30"} cursor={"pointer"} color='purple' />
+          </HStack>
 
         </Box>
+        </section>
 
 
       </section>

@@ -188,11 +188,12 @@ function AuthController() {
                 //2. Hash the user reset token and update
                 user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
 
-                console.log('check reset tokens ', user.resetPasswordToken, resetToken);
+                // console.log('check reset tokens ', user.resetPasswordToken, resetToken, user.resetPasswordToken === resetToken);
 
                 //3. Define the time to reset the token
                 user.resetPasswordTokenTime = Date.now() + 15 * 60 * 60 * 1000; //15 minutes;
 
+                await user.save();
 
                 //---------------- Now we move to send the mail
                 const FrontendUrl = process.env.FRONTEND_URL || FRONTEND_URL;
@@ -201,11 +202,16 @@ function AuthController() {
                 const msg = `Click on ${url} to reset your password, if you haven't send, then please ignore this`;
 
                 //Send the mail
-                await SendMail(user.email, 'Coursera reset password', msg);
+                try {
+                    await SendMail(user.email, 'Coursera reset password', msg);
+                    
+                } catch (error) {
+                    console.log(error);
+                }
 
                 return res.status(200).json({ success: true, msg: `Check ${user.email} to reset password` })
 
-            } catch (error) { return res.status(500).json({ success: true, msg: `${error.message}` }); }
+            } catch (error) { return res.status(500).json({ success: false, msg: `${error}` }); }
         },
 
         //After click on reset token, we reset the password, using POST '/api/user/resetPassword/:token'
@@ -213,20 +219,24 @@ function AuthController() {
             try {
                 //Get the constraints from the user
                 const { password, cpassword } = req.body;
+                const {token} = req.params;
+               
+                if (password.length < 8 || cpassword.length < 8)
+                    return res.status(404).json({ success: false, msg: "Password & Confirm password must be 8 char long" })
 
-                if (password !== cpassword) return res.status(404).json({ success: false, msg: 'Your password and confirm password not match' })
+                //check password and confirm password match
+                if (password !== cpassword) { return res.status(404).json({ success: false, msg: "Password and ConfrimPassword did not match" }) };
 
-                //Get the constraints from params, to verify user
-                let { token } = req.params;
+                const hashToken = crypto.createHash('sha256').update(token).digest('hex');
 
-                token = crypto.createHash('sha256').update(token).digest('hex');
+                console.log('hashtoken ',hashToken);
 
                 //Find the user in according of the token 
-                let user = await UserModel.find({ resetPasswordToken: token, resetPasswordTokenTime: { $lt: Date.now() } });
+                const user = await UserModel.find({ resetPasswordToken: hashToken, resetPasswordTokenTime: { $lt: Date.now() } });
+                
+                if (!user) return res.status(401).json({ success: false, msg: 'Token is expires or user is not found' });
 
                 console.log('reset password user is ', user);
-
-                if (!user) return res.status(401).json({ success: false, msg: 'Token is expires or user is not found' });
 
                 //After finding update the password or can say hash the password
                 user.password = await bcrypt.hash(password, 10);
@@ -235,7 +245,7 @@ function AuthController() {
 
                 return res.status(200).json({ success: true, msg: 'Your password is reset successfully', user });
 
-            } catch (error) { return res.status(500).json({ success: true, msg: `${error.message}` }); }
+            } catch (error) { return res.status(500).json({ success: false, msg:error}); }
         }
 
 

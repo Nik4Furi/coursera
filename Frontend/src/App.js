@@ -1,28 +1,22 @@
 import React from 'react';
 
-//Setup react-router----------------------
-import {BrowserRouter,Route,Routes} from 'react-router-dom'
-import Home from './pages/Home';
-import Header from './components/Layout/Header';
-import Courses from './pages/Courses';
+import Routers from './OurRoutes'; //setup all routes here
 
 
 
 function App() {
+  //Disable to right click to download the video 
+  // window.addEventListener('contextmenu',(e)=>{
+  //   // e.preventDefault();
+  // })
+
   return (
-  
-      <>
-      <BrowserRouter >
-<Header />
-        <Routes>
+    <>
 
-    <Route path='/' element={<Home />} ></Route>
-    <Route path='/courses' element={<Courses />} ></Route>
+      {/* ------------- Specifying all routes in our page ----------------X */}
+      <Routers />
 
-        </Routes>
-      
-      </BrowserRouter>
-      </>
+    </>
   );
 }
 

@@ -21,7 +21,7 @@ Routers.put('/updatePicture',FetchUser,UploadFile,AuthController().updatePicture
 
 //Auth controllers routes is connect in between
 Routers.post('/forgetPassword',AuthController().forgetPassword); //To forget the password send the mail of register emails, using POST '/api/user/forgetPassword'
-Routers.post('/resetPassword/:token',AuthController().resetPassword); //Through the mail, check reset password token and reset the password of the user, using POST '/api/user/resetPassword/token'
+Routers.put('/resetPassword/:token',AuthController().resetPassword); //Through the mail, check reset password token and reset the password of the user, using POST '/api/user/resetPassword/token'
 
 
 
