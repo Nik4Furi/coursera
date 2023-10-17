@@ -41,10 +41,19 @@ if (Version === 'v1') {
     //--------- Scheduling the task in every month, that will create states
     nodeCron.schedule('0 0 0 1 * *', async () => { //every month
         try {
+
+            
             await StatsModel.create({});
 
         } catch (error) { }
     })
+
+    // const turn = async()=> {
+    //     await StatsModel.create({});
+
+    // }
+
+    // turn();
 
     //--------------------- Routes ---------------------X
     //Auth Routes

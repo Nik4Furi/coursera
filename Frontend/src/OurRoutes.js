@@ -24,7 +24,11 @@ import Profile from './pages/Auth/Profile';
 import ChangePassword from './pages/Auth/ChangePassword';
 import UpdateProfile from './pages/Auth/UpdateProfile';
 import Users from './pages/Admin/Users';
+
+//-------- Admin Specific Pages
+import AdminDashboard from './pages/Admin/Dashboard/Dashboard';
 import CreateCourse from './pages/Admin/CreateCourse';
+import AdminCourses from './pages/Admin/AdminCourses';
 
 
 const OurRoutes = () => {
@@ -85,12 +89,18 @@ const OurRoutes = () => {
           {/* Reset Password Page  */}
           <Route path='/course/request' element={<Layout ><RequestCourse /></Layout>} />
 
-          {/* -------------------------- Admin Specific Routes --------------X  */}          
+          {/* -------------------------- Admin Specific Routes --------------X  */}                 
+          {/* Admin Dashboard Page  */}
+          <Route path='/admin/dashboard' element={<Layout ><AdminDashboard /></Layout>} />
+          
           {/* Admin Users Show Page  */}
           <Route path='/admin/users' element={<Layout ><Users /></Layout>} />
 
           {/* Admin Create Course Page  */}
           <Route path='/admin/createcourse' element={<Layout ><CreateCourse /></Layout>} />
+
+          {/* Admin Course Lectures Page  */}
+          <Route path='/admin/courses' element={<Layout ><AdminCourses /></Layout>} />
 
 
           {/* Error Page  */}

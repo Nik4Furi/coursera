@@ -119,13 +119,7 @@ function AdminController() {
                     usersPercentage, subscriptionPercentage, viewsPercentage
                 }
 
-                return res.status(200).json({ success: true, msg: 'Show the stats data ', statsData, Counts,Profit,Percentage })
-
-
-
-
-
-
+                return res.status(200).json({ success: true, msg: 'Show the stats data ', statsData, Counts, Profit, Percentage })
 
             } catch (error) { return res.status(500).json({ success: false, msg: error }) }
         }

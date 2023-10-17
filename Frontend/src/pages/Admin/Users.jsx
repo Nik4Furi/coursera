@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { Box,Table, TableCaption, TableContainer, Tbody, Th, Thead, Tr, VStack,Text,Td,Tfoot, HStack } from '@chakra-ui/react'
+import { Box, Table, TableCaption, TableContainer, Tbody, Th, Thead, Tr, VStack, Text, Td, Tfoot, HStack, Image } from '@chakra-ui/react'
 
 //Icons/Images Stuff
-import {AiFillDelete} from 'react-icons/ai'
+import { AiFillDelete } from 'react-icons/ai'
 
 //Layout
 import AdminLayout from '../../components/Admin/AdminLayout'
@@ -14,6 +14,7 @@ import TextHighlight from '../../components/Layout/TextHighlight'
 
 
 const Users = () => {
+    const UserTableHeads = ['name', 'email', 'avatar', 'role']
     return (
         <>
             <AdminLayout>
@@ -24,7 +25,7 @@ const Users = () => {
 
                         {/* Here we show the table data of the users  */}
                         <Box overflowX={'auto'}>
-                            <DataShowInTable />
+                            <DataShowInTable tabelTitle={'users'} tablesHeads={UserTableHeads} />
                         </Box>
 
                     </VStack>
@@ -37,55 +38,38 @@ const Users = () => {
 
 export default Users;
 
-export const DataShowInTable = () => {
+export const DataShowInTable = ({ tabelTitle, tablesHeads,handleFunction,handleDelete }) => {
     return (
 
         <TableContainer>
             <Table variant='striped' colorScheme='blackAlpha.200'>
-                <TableCaption>All availables users here</TableCaption>
-                <Thead>
+                <TableCaption>All availables {tabelTitle === 'users' ? 'users' : 'courses'} here</TableCaption>
+                <Thead textAlign={'center'}>
                     <Tr>
                         <Th>S.No.</Th>
-                        <Th>Name</Th>
-                        <Th>Email</Th>
-                        <Th>Avatar</Th>
-                        <Th>Role</Th>
+                        {tablesHeads.map((item, i) => (
+
+                            <Th key={i}>{item}</Th>
+                        ))}
                         <Th>Action</Th>
                         {/* <Th isNumeric>multiply by</Th> */}
                     </Tr>
                 </Thead>
                 <Tbody>
+               
                     <Tr>
-                        <Td>inches</Td>
-                        <Td>millimetres (mm)</Td>
-                        <Td>inches</Td>
-                        <Td>millimetres (mm)</Td>
-                        <Td>inches</Td>
-                        <Td>  <HStack>
-                            <Buttons title={'Change Role'} />   <AiFillDelete cursor={'pointer'} /> </HStack> </Td>
-                        {/* <Td isNumeric>25.4</Td> */}
-                    </Tr>
-                    <Tr>
-                        <Td>feet</Td>
+                        <Td>1.</Td>
                         <Td>centimetres (cm)</Td>
-                        <Td>inches</Td>
                         <Td>millimetres (mm)</Td>
-                        <Td>inches</Td>
+                        <Td><Image /></Td>
+                        <Td isNumeric>inches</Td>
                         <Td>
                             <HStack>
-                            <Buttons title={'Change Role'} />   <AiFillDelete cursor={'pointer'} /> </HStack>  </Td>
+
+                                <Buttons handleClick={handleFunction}  title={`${tabelTitle === 'users' ? 'Change Role' : 'Watch Lectures'}`} />   <AiFillDelete cursor={'pointer'} onClick={handleDelete} /> </HStack>  </Td>
                         {/* <Td isNumeric>30.48</Td> */}
                     </Tr>
-                    <Tr>
-                        <Td>yards</Td>
-                        <Td>metres (m)</Td>
-                        <Td>inches</Td>
-                        <Td>millimetres (mm)</Td>
-                        <Td>inches</Td>
-                        <Td>  <HStack>
-                            <Buttons title={'Change Role'} />   <AiFillDelete cursor={'pointer'} /> </HStack>  </Td>
-                        {/* <Td isNumeric>0.91444</Td> */}
-                    </Tr>
+                   
                 </Tbody>
                 {/* <Tfoot>
                     <Tr>

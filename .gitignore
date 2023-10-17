@@ -24,4 +24,5 @@ yarn-error.log*
 
 
 # Secret Configuration
-.env 
+.env
+Backend/.env

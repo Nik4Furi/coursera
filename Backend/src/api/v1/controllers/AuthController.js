@@ -229,17 +229,19 @@ function AuthController() {
 
                 const hashToken = crypto.createHash('sha256').update(token).digest('hex');
 
-                console.log('hashtoken ',hashToken);
+                // console.log('hashtoken ',hashToken);
 
                 //Find the user in according of the token 
-                const user = await UserModel.find({ resetPasswordToken: hashToken, resetPasswordTokenTime: { $lt: Date.now() } });
+                const user = await UserModel.find({ resetPasswordToken: hashToken, resetPasswordTokenTime: { $gt: Date.now() } });
                 
                 if (!user) return res.status(401).json({ success: false, msg: 'Token is expires or user is not found' });
 
-                console.log('reset password user is ', user);
 
                 //After finding update the password or can say hash the password
                 user.password = await bcrypt.hash(password, 10);
+
+                user.resetPasswordToken = undefined;
+                user.resetPasswordTokenTime = undefined
 
                 await user.save();
 

@@ -136,7 +136,7 @@ export const FileUpload = {
     "&::file-selector-button": {
         cursor: 'pointer',
         marginLeft: '-5%',
-        color: 'purple',
+        color: 'salmon',
         border: 'none',
         height: '100%',
         background: 'transparent',
