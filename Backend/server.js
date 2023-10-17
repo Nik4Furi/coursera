@@ -80,4 +80,5 @@ if (Version === 'v1') {
 const Server = process.env.SERVER || SERVER;
 const Port = process.env.PORT || PORT;
 
-app.listen(Port, () => console.info(`Application listen at ${Server}:${Port}`))
+app.listen(8000, () => console.info(`Application listen at http://localhost:8000`))
+// app.listen(Port, () => console.info(`Application listen at ${Server}:${Port}`))
