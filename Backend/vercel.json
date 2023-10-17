@@ -1,6 +1,5 @@
 {
     "version": "2",
-    "name": "coursera_api",
     "builds": [
         {
             "src": "./server.js",
