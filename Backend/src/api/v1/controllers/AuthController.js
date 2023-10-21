@@ -72,11 +72,11 @@ function AuthController() {
 
                 // Check the user is not already register
                 let users = await UserModel.findOne({ email })
-                if (!users) { return res.status(401).json({ success: false, msg: "this crenditentals's user is not register, Plz login first" }) };
+                if (!users) { return res.status(401).json({ success: false, msg: "Your crenditentals is not correct" }) };
 
                 //Comparing the password of register and login user
                 let hashPassword = await bcrypt.compare(password, users.password)
-                if (!hashPassword) { return res.status(404).json({ success: false, msg: "Your credentials not right, plz re-write!" }) }
+                if (!hashPassword) { return res.status(404).json({ success: false, msg: "Your credentials not correct" }) }
 
                 // Now create the token to authorizing the users
                 const payloads = {
@@ -109,7 +109,7 @@ function AuthController() {
 
                 if (!oldpassword || !newpassword) return res.status(404).json({ success: false, msg: 'All fields are required' })
 
-                let user = req.user;
+                let user = await UserModel.findOneById(req.user._id);
 
                 const isMatch = bcrypt.compare(oldpassword, user.password);
 
@@ -232,9 +232,11 @@ function AuthController() {
                 // console.log('hashtoken ',hashToken);
 
                 //Find the user in according of the token 
-                const user = await UserModel.find({ resetPasswordToken: hashToken, resetPasswordTokenTime: { $gt: Date.now() } });
+                const user = await UserModel.findOne({ resetPasswordToken: hashToken, resetPasswordTokenTime: { $gt: Date.now() } });
                 
                 if (!user) return res.status(401).json({ success: false, msg: 'Token is expires or user is not found' });
+
+                console.log('user ',user)
 
 
                 //After finding update the password or can say hash the password

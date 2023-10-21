@@ -21,10 +21,11 @@ function PlaylistController() {
 
                 //First find the lectures is exist
                 const { id } = req.params;
-                const findLecture = await CourseModal.findOne({ 'lectures._id': id });
-                // const findLecture = await CourseModal.find({lectures : {'_id':req.params.id}})
+                const findCourse = await CourseModal.findOne({_id:id});
 
-                if (!findLecture) return res.status(404).json({ success: false, msg: 'Lecture is not found' });
+                if (!findCourse) return res.status(404).json({ success: false, msg: 'Course is not found' });
+
+                console.log('course ',findCourse)
 
                 //Other wise add this lecture in playlist
                 req.user.playlist.push(id);

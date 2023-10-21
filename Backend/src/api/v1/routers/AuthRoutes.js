@@ -17,7 +17,7 @@ Routers.get('/getUser',FetchUser,AuthController().getUser); //get info of login 
 
 Routers.put('/changePassword',FetchUser,AuthController().changePassword); //Change the password in basis of old password is correct, using PUT '/api/user/changePassword'
 Routers.put('/updateProfile',FetchUser,AuthController().updateProfile); //Update the user profile like name,email,dp etc, using PUT '/api/user/updateProfile'
-Routers.put('/updatePicture',FetchUser,UploadFile,AuthController().updatePicture); //Update the user profile like name,email,dp etc, using PUT '/api/user/updateProfile'
+Routers.put('/updatePicture',FetchUser,UploadFile,AuthController().updatePicture); //Update the user profile like name,email,dp etc, using PUT '/api/user/updatePicture'
 
 //Auth controllers routes is connect in between
 Routers.post('/forgetPassword',AuthController().forgetPassword); //To forget the password send the mail of register emails, using POST '/api/user/forgetPassword'

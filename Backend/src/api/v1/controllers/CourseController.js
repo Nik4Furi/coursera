@@ -15,14 +15,16 @@ function CourseController() {
         // Fetch all the coureses, using GET '/api/course/fetchAll'
         async fetchAll(req, res) {
             try {
-                const {keyword,category} = req.query;
+                const { keyword, category } = req.query;
 
-                const courses = await CourseModel.find({
-                    title : { $regex : keyword, $option:'i'},
-                    category : { $regex : category, $option:'i'},
-                }).select('-lectures').sort({ createdAt: 'desc' });
+                const courses = await CourseModel.find().select('-lectures').sort({ createdAt: 'desc' });
 
+                // const courses = await CourseModel.find({
+                //     title: { $regex: keyword, $option: 'i' },
+                //     category: { $regex: category, $option: 'i' },
+                // }).select('-lectures').sort({ createdAt: 'desc' });
 
+                // console.log('courses ', courses);
 
                 if (courses.length === 0) return res.status(200).json({ success: true, msg: 'At a time no course is available, please send request to add on' })
 
@@ -39,10 +41,10 @@ function CourseController() {
                 //Here the poster of the course
                 if (!title || !description || !category) return res.status(401).json({ success: false, msg: 'All fields are required' })
 
-                //1. Find the users by the id
-                let user = await UserModel.findById(req.userId);
-                if (!user)
-                    return res.status(404).json({ success: false, msg: 'User not found' });
+                // //1. Find the users by the id
+                // let user = await UserModel.findById(req.userId);
+                // if (!user)
+                //     return res.status(404).json({ success: false, msg: 'User not found' });
 
                 //get the file
                 const file = req.file;
@@ -92,37 +94,37 @@ function CourseController() {
         },
 
         //Function to fetch the lectue if is admin or subscribe user, using GET '/api/course/fetchLectures'
-        async fetchLectures(req,res){
+        async fetchLectures(req, res) {
             try {
                 const lectures = await CourseModel.find().select('lectures');
 
                 // lectures.views += 1;
 
                 // await lectues.save();
-                
-                if(lectures.length === 0) return res.status(200).json({success:true,msg:'No lecture is here to show'})
 
-                return res.status(200).json({success:true,msg:'Fetch all the lectures ',lectures})
+                if (lectures.length === 0) return res.status(200).json({ success: true, msg: 'No lecture is here to show' })
 
-            } catch (error) { return res.status(500).json({success:false,msg:error})   }
+                return res.status(200).json({ success: true, msg: 'Fetch all the lectures ', lectures })
+
+            } catch (error) { return res.status(500).json({ success: false, msg: error }) }
         },
 
         //Function to fetch the lectue if is admin or subscribe user, using GET '/api/course/fetchLectures'
-        async fetchLecture(req,res){
+        async fetchLecture(req, res) {
             try {
-                const lecture = await CourseModel.findOne({'lectures._id':req.params.id});
+                const lecture = await CourseModel.findOne({ 'lectures._id': req.params.id });
 
-                log('check lecture ',lecture)
+                log('check lecture ', lecture)
 
                 lecture.views += 1;
 
                 await lecture.save();
-                
+
                 // if(lecture.length === 0) return res.status(200).json({success:true,msg:'No lecture is here to show'});
 
-                return res.status(200).json({success:true,msg:'Fetch all the lectures ',lecture})
+                return res.status(200).json({ success: true, msg: 'Fetch all the lectures ', lecture })
 
-            } catch (error) { return res.status(500).json({success:false,msg:error})   }
+            } catch (error) { return res.status(500).json({ success: false, msg: error }) }
         },
 
         //Add a new lecture on the lectures, using POST '/api/course/addLecture'
@@ -140,6 +142,7 @@ function CourseController() {
 
                 if (!course) return res.status(404).json({ success: false, msg: 'Course not found' });
 
+                console.log('course ',course);
                 //------------------ Uploading the file in cloudinary
                 const file = req.file;
 
@@ -207,8 +210,8 @@ function CourseController() {
 }
 
 //----------------- Watch function in mongoDb, call whenever any changes is made in any of model
-CourseModel.watch().on('change',async() =>{
-    const stats = await StatsModel.find().sort({createdAt:'desc'}).limit(1) //show only last one
+CourseModel.watch().on('change', async () => {
+    const stats = await StatsModel.find().sort({ createdAt: 'desc' }).limit(1) //show only last one
 
     // Now find users have active subscription
     const courses = await CourseModel.find()
@@ -216,10 +219,10 @@ CourseModel.watch().on('change',async() =>{
     let totalViews = 0;
 
 
-    for(let course of courses )
+    for (let course of courses)
         totalViews += course.views;
 
-    console.log('totalviews ',totalViews);
+    console.log('totalviews ', totalViews);
 
     stats[0].views = totalViews;
 

@@ -22,12 +22,15 @@ import {
 
 import { RiArrowRightLine } from 'react-icons/ri'
 import Buttons from './Buttons'
+import { useSelector } from 'react-redux'
 
 
 function Header() {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef();
+
+  const user = useSelector(state => state.user);
 
 
   return (
@@ -58,14 +61,26 @@ function Header() {
                   <Link to={'/'}><Button onClick={onClose} variant={'ghost'}>Home</Button></Link>
                   <Link to={'/subscribe'}><Button onClick={onClose} variant={'ghost'}>Subscribe</Button></Link>
                   <Link to={'/contact'}><Button onClick={onClose} variant={'ghost'}>Contact US</Button></Link>
+                  <Link to={'/course/request'}><Button onClick={onClose} variant={'ghost'}>Request Course</Button></Link>
+                  {user.user?.role === 'admin' && user.isAuthenticated === true ? (<Link to={'/admin/dashboard'}><Button onClick={onClose} variant={'ghost'}>Dashboard</Button></Link>) : (user.isAuthenticated === true && <Link to={'/profile'}><Button onClick={onClose} variant={'ghost'}>Profile</Button></Link>)}
+
                 </VStack>
               </DrawerBody>
 
               <DrawerFooter>
-                <Stack direction={['column', 'row']} justifyContent={['center', 'space-around']} w={'full'} >
-                  <Link to={'/login'}> <Buttons handleClick={onClose} title={'Login'} /></Link>
-                  <Link to={'/requestcourse'}> <Buttons handleClick={onClose} title={'Request A Course'} /></Link>
-                </Stack>
+
+                {user.isAuthenticated === true
+                  ? (<Stack direction={['column', 'row']} justifyContent={['center', 'space-around']} w={'full'} >
+
+                   {user.user?.role === 'admin' && <Link to={'/admin/dashboard'}> <Buttons variant={'outline'} handleClick={onClose} title={'Dashboard'} /></Link>}
+                   
+                    <Link to={'/logout'}> <Buttons handleClick={onClose} title={'Logout'} /></Link>
+                  </Stack> ) 
+                  : ( <Link to={'/login'}> <Buttons handleClick={onClose} title={'Login'} /></Link>
+                  )
+                }
+                { }
+
                 {/* <Button variant='outline' mr={3} onClick={onClose}>
                   Cancel
                 </Button> */}

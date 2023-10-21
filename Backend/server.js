@@ -9,8 +9,8 @@ const express = require('express')
 const app = express();
 const nodeCron = require('node-cron'); //used to schedule the task
 
-// const cors = require('cors'); //When your app's api connect with the forntend applications
-// app.use(cors())
+const cors = require('cors'); //When your app's api connect with the forntend applications
+app.use(cors())
 
 //------------------ Configuring the Cloudinary to upload poster and videos
 const cloudinary = require('cloudinary');
@@ -75,6 +75,10 @@ if (Version === 'v1') {
     //Payment Routes
     const PaymentRoutes = require('./src/api/v1/routers/PaymentRoutes')
     app.use('/api/payment', PaymentRoutes)
+
+    //Payment Routes
+    const OtherRoutes = require('./src/api/v1/routers/OtherRoutes')
+    app.use('/api', OtherRoutes)
 }
 
 const Server = process.env.SERVER || SERVER;

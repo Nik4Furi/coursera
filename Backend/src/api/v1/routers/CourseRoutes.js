@@ -13,7 +13,7 @@ const SubscribeLecture = require('../middlewares/SubscribeLecture');
 
 //----------------------- INitizlalzing courses apis's routes here -------------------X
 //Course CRUD
-Routers.get('/fetchAll',FetchUser,CourseController().fetchAll); //Fetch all the courses, using GET '/api/course/fetchAll'
+Routers.get('/fetchcourses',CourseController().fetchAll); //Fetch all the courses, using GET '/api/course/fetchAll'
 Routers.post('/addCourse',FetchUser,CheckRole,UploadFile,CourseController().addCourse); //Add a new course, using POST '/api/course/addCourse'
 Routers.delete('/removeCourse/:id',FetchUser,CheckRole,CourseController().removeCourse); //delete a course, using DELETE '/api/course/removeCourse/id'
 

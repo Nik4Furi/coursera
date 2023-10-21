@@ -20,7 +20,7 @@ function OtherController(){
                     return res.status(409).json({success:false,msg:'Please fill valid details'})
 
                 //------------ Now send the mail to admin for contact
-                const to = process.env.ADMIN_MAIL;
+                const to = process.env.ADMIN_MAIL || "nikhilgurjar122000@gmail.com";
                 const subject=`${name} want to contact us from Coursera`;
                 const text=`Hy, I am ${name}, and my mail is ${email}, please read my message --->\n ${msg}`;
 

@@ -22,9 +22,11 @@ function AdminController() {
         //Update the users profiles
         async updateUserProfile(req, res) {
             try {
-                let user = await UserModel.findById(req.params.id);
+                let user = await UserModel.findOne({_id:req.params.id});
 
                 if (!user) return res.status(401).json({ success: false, msg: 'User is not found' })
+
+                console.log('user find ',user)
 
                 if (user.role === 'admin') user.role = 'user';
                 else user.role = 'admin';
@@ -42,6 +44,8 @@ function AdminController() {
                 let user = await UserModel.findById(req.params.id);
 
                 if (!user) return res.status(401).json({ success: false, msg: 'User is not found' })
+
+                console.log('user ',user)
 
                 //Deleting the avatar
                 if (user.avatar.public_id)

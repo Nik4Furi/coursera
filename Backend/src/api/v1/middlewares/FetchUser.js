@@ -19,7 +19,7 @@ const FetchUser = async (req, res, next) => {
         // console.log('check users ',users);
         
         //Find the user by the id
-        const userFind = await UserModel.findById(users.user.id);
+        const userFind = await UserModel.findById(users.user.id).select('-password');
         if(!userFind) return res.status(404).json({success:false,msg:'User not found'});
 
         req.user = userFind;
