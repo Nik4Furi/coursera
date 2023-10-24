@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {Link, useNavigate} from 'react-router-dom'
+
+import toast from 'react-hot-toast'
 
 import {
   Box,
@@ -9,71 +11,38 @@ import {
   Img,
   Flex,
   Center,
-  useColorModeValue,
   HStack,
   Button,
 } from '@chakra-ui/react'
-import { BsArrowUpRight, BsHeartFill, BsHeart } from 'react-icons/bs'
 
-import toast from 'react-hot-toast'
+//-------------Store Specific Stuff
+import { handleAddToPlaylist } from '../../Store/UsersSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-
-//Icons/Image Stuff
-import demo from '../../assets/images/header-2.png'
+//Global Functions Stuff
+import { Token } from '../../GlobalFunctions';
 
 //Components
 import Buttons from '../../components/Layout/Buttons'
-import { SERVER, Token } from '../../GlobalFunctions';
-import { setLectures,addLecture } from '../../store/UserSlice';
-import { useDispatch } from 'react-redux';
 
-export default function CourseCard({ img, title, description, category, lectureCount, views,id }) {
+export default function CourseCard({ img, title, description, category, lectureCount, id }) {
 
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  //----------- Function to add course into playlist
-  const handleAddToPlaylist = async () => {
+  const {loading} = useSelector(state=>state.course);
 
-    console.log('id is ',id)
+  //----------- Function to add course into playlist
+  const handleAddCourse = async () => {
 
     if(!Token){
-      toast.error('Please login first')
+      toast.error('Before adding course in playlist, please login')
       navigate('/login');
       return;
     }
-     return;
-    setLoading(true);
 
-    try {
-      const url = `${SERVER}/playlist/addToPlaylist/${id}`;
-      const options = {
-        method: 'POST',
-        headers: { "auth-token": Token }
-      }
-
-      const res = await fetch(url, options);
-      const data = await res.json();
-
-      console.log('add to playlist', data);
-
-      if (data.success === true){
-
-        toast.success(data.msg);
-
-        // dispatch(addLecture(data.course))
-      }
-      else toast.error(data.msg);
-
-    } catch (error) {
-      toast.error(error);
-      console.log(error);
-
-    }
-
-    setLoading(false);
+    dispatch(handleAddToPlaylist(id));
   }
 
   return (
@@ -86,16 +55,13 @@ export default function CourseCard({ img, title, description, category, lectureC
         bg="white"
         boxShadow={'dark-lg'} >
 
-        <Box h={'200px'} borderBottom={'1px'} borderColor="black">
+        <Box borderBottom={'1px'} borderColor="black">
           <Img
-            src={(!img || img === undefined) ? demo : img}
-            // src={
-            //   'https://images.unsplash.com/photo-1542435503-956c469947f6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80'
-            // }
+            src={img}
             roundedTop={'sm'}
-            objectFit="cover"
-            h="full"
+            objectFit="fit"
             w="full"
+            h='fit-content'
             alt={title}
           />
         </Box>
@@ -127,27 +93,12 @@ export default function CourseCard({ img, title, description, category, lectureC
             roundedBottom={'sm'}
             cursor={'pointer'}
             w="full">
-        
-            {/* <Button  >Add To Playlist</Button> */}
 
-          <Link to='/lectures' >  <Button backdropBlur={'sm'} colorScheme='red.500' background={'red.200'} boxShadow={'md'} >Watch Now</Button></Link>
-            <Buttons title={'Add To Playlist'} loading={loading} handleClick={handleAddToPlaylist} />
+          <Link to={`/course/lecture/${id}`} >  <Button backdropBlur={'sm'} colorScheme='red.500' background={'red.200'} boxShadow={'md'} >Watch Now</Button></Link>
+            <Buttons title={'Add To Playlist'} loading={loading} handleClick={handleAddCourse} />
           </Flex>
 
-          {/* <Flex
-            p={4}
-            alignItems="center"
-            justifyContent={'space-between'}
-            roundedBottom={'sm'}
-            borderLeft={'1px'}
-            cursor="pointer"
-            onClick={() => setLiked(!liked)}>
-            {liked ? (
-              <BsHeartFill fill="red" fontSize={'24px'} />
-            ) : (
-              <BsHeart fontSize={'24px'} />
-            )}
-          </Flex> */}
+     
         </HStack>
       </Box>
     </Center>

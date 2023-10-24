@@ -33,8 +33,6 @@ const ResetPassword = () => {
 
         setLoading(true);
 
-        console.log('formdata ', formData);
-
         const { password, cpassword } = formData;
 
         //-------Check password and cpassword
@@ -67,7 +65,6 @@ const ResetPassword = () => {
 
         } catch (error) {
             toast.error(error);
-            console.log(error);
 
         }
 

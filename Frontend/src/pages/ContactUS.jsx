@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 import { AiOutlineMail, AiOutlineUser } from 'react-icons/ai'
 
 //Global Function Stuff
-import { CoursesCategories, SERVER } from '../GlobalFunctions';
+import { SERVER } from '../GlobalFunctions';
 
 //Components Specific Stuff
 import FormInput from '../components/Layout/FormInput';
@@ -33,14 +33,12 @@ const ContactUS = () => {
     e.preventDefault();
 
     setLoading(true);
-    console.log('formdata ', formData);
-
-    const {name,email,msg} = formData;
 
     //---------- Validation the email
-    if(/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/.test(email) === false){
-        toast.error(`${email} is not valid`)
+    if(/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/.test(formData.email) === false){
+        toast.error(`${formData.email} is not valid`)
         setFormData({...formData,email:''});
+        setLoading(false);
         return;
     }
 
@@ -69,7 +67,6 @@ const ContactUS = () => {
 
     } catch (error) { 
         toast.error(error);
-        console.log(error);  
     }
 }
 
@@ -107,14 +104,14 @@ export default ContactUS
 
 
 // ---------------- Text area of to writing the msg 
-export const AddTextArea = ({label,value,handleChange,name,placeholder,my='2',minlen,maxlen})=>{
+export const AddTextArea = ({label,value,handleChange,name,placeholder,my='2',minlen,maxlen,border='0.5px solid',outline='purple'})=>{
     return (
         <FormControl isRequired my={my}>
                 
         {label && <FormLabel> {label}: </FormLabel>}
 
         <InputGroup>
-            <Textarea minLength={minlen} maxLength={maxlen} placeholder={placeholder} name={name} id={name} value={value} onChange={handleChange} />
+            <Textarea minLength={minlen} maxLength={maxlen} placeholder={placeholder} name={name} id={name} value={value} onChange={handleChange} border={border} outline={outline} />
 
         </InputGroup>
 

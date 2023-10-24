@@ -1,9 +1,16 @@
-import React, { Suspense, lazy } from 'react'
+import React, { useEffect } from 'react'
 
 import { Link } from 'react-router-dom'
 
+import toast from 'react-hot-toast'
+
 //Chakra UI Components
-import { Text, Container, Heading, Stack, VStack, Button, Image, Box, HStack } from '@chakra-ui/react'
+import { Text, Container, Heading, Stack, VStack, Image, Box, HStack } from '@chakra-ui/react'
+
+
+//--------Redux store stuff
+import { useDispatch, useSelector } from 'react-redux'
+import { clearCoursesError, fetchCourses } from '../Store/CourseSlice'
 
 //-------------- Images/Icons Container----------------------X
 import Header from '../assets/images/header-3.webp'
@@ -14,12 +21,31 @@ import { DiAws } from 'react-icons/di'
 //Components Stuff
 import TextHighlight from '../components/Layout/TextHighlight'
 import Buttons from '../components/Layout/Buttons'
-import Loading from '../components/Layout/Loading'
-
-const CoursesContainer = lazy(() => import('../components/Home/CoursesContainer'));
+import CoursesContainer from "../components/Home/CoursesContainer"
 
 
 function Home() {
+
+
+  const dispatch = useDispatch();
+  const { success, msg, courses } = useSelector(state => state.course);
+  
+  useEffect(() => {
+    dispatch(fetchCourses()); //api call to fetch courses
+  }, [dispatch])
+
+  useEffect(() => { //Course Specific Stuff
+
+    if (success === true && msg)
+      toast.success(msg);
+
+    else if (success === false && msg)
+      toast.error(msg);
+
+    dispatch(clearCoursesError());
+
+  }, [dispatch, success, msg]);
+
 
   return (
     <>
@@ -27,7 +53,7 @@ function Home() {
 
         <Container maxW={'container.lg'} mt={'5'} >
 
-          <Stack direction={["column", "row"]} h={'50vh'} >
+          <Stack my={['10','3']} direction={["column-reverse", "row"]} minH={'50vh'} >
 
             <VStack >
               <Heading> <TextHighlight title={'Coursera'} colorscheme='yellow' size='xl' /> , Kick Your Career Now  </Heading>
@@ -49,9 +75,8 @@ function Home() {
 
           {/* Here we show all the courses list to need to search  */}
           <section>
-            <Suspense fallback={<Loading />}>
-              <CoursesContainer /></Suspense>
-          </section>
+            { courses &&  <CoursesContainer courses={courses} /> }
+            </section>
 
         </Container>
 

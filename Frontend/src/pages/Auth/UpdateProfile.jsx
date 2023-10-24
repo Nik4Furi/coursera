@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 
-import { useParams } from 'react-router-dom';
-
 import { Box, Container, Heading } from '@chakra-ui/react';
 
 import toast from 'react-hot-toast'
@@ -10,22 +8,25 @@ import toast from 'react-hot-toast'
 import { AiOutlineMail, AiOutlineUser } from 'react-icons/ai'
 
 //Global Function Stuff
-import {SERVER, Token} from '../../GlobalFunctions'
+import { SERVER, Token } from '../../GlobalFunctions'
 
 //Components Stuff
 import Buttons from '../../components/Layout/Buttons';
 import FormInput from '../../components/Layout/FormInput';
+import { useDispatch } from 'react-redux';
+import { updateProfile } from '../../Store/UsersSlice';
 
 
-const UpdateProfile = ({user}) => {
+const UpdateProfile = ({ user }) => {
 
+    const dispatch = useDispatch();
     //------------------ Form Specific Stuff ----------------
 
     const [formData, setFormData] = useState({
-        name: user.user?.name || '',
-        email: user.user?.email || ''
+        name: user?.name || '',
+        email: user?.email || ''
     });
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     //Function to handle the onchange event on input data
     const handleOnChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -51,17 +52,19 @@ const UpdateProfile = ({user}) => {
             const res = await fetch(url, options);
             const data = await res.json();
 
-            if (data.success === true)
+            if (data.success === true) {
+
                 toast.success(data.msg);
+                dispatch(updateProfile({ name: formData.name, email: formData.email }))
+            }
             else toast.error(data.msg);
 
         } catch (error) {
             toast.error(error);
-            console.log(error);
         }
 
         setLoading(false);
-        setFormData({name : user.user?.name || '',email:user.user?.email ||'' });
+        setFormData({ name: '', email: '' });
     }
 
     return (

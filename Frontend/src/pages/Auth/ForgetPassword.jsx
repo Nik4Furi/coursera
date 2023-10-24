@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 
+import { useNavigate } from 'react-router-dom'
+
 import { Box, Container, Heading } from '@chakra-ui/react'
+
+import toast from 'react-hot-toast'
+
+//Global Functions
+import { SERVER } from '../../GlobalFunctions'
 
 //Icons/images Stuff
 import { AiOutlineMail } from 'react-icons/ai'
@@ -8,13 +15,9 @@ import { AiOutlineMail } from 'react-icons/ai'
 //Components Stuff
 import FormInput from '../../components/Layout/FormInput'
 import Buttons from '../../components/Layout/Buttons'
-import toast from 'react-hot-toast'
-import { SERVER } from '../../GlobalFunctions'
-import { useNavigate } from 'react-router-dom'
+
 
 const ForgetPassword = () => {
-
-    const navigate = useNavigate();
 
     //------------ Form Specific Stuff--------------------
     const [formData, setFormData] = useState({ email: '' });
@@ -22,12 +25,11 @@ const ForgetPassword = () => {
 
     //Function to handle the onchange event on input data
     const handleOnChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
-    // console.log(SERVER);
+
     //Function to handle the forget password stuff
     const handleForgetPassword = async (e) => {
-        e.preventDefault();
 
-        console.log('forget password ', formData, SERVER);
+        e.preventDefault();
 
         setLoading(true);
 
@@ -54,15 +56,13 @@ const ForgetPassword = () => {
             const res = await fetch(url, options);
             const data = await res.json();
 
-            console.log('forget password ', data);
-
             if (data.success === true)
                 toast.success(data.msg);
+
             else toast.error(data.msg);
 
         } catch (error) {
             toast.error(error);
-            console.log(error)
         }
 
         setLoading(false);

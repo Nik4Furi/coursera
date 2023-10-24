@@ -1,4 +1,3 @@
-
 const multer = require('multer');
 
 //-------- Function to create the storage

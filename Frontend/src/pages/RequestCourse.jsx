@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 
 import { Box, Container, FormControl, FormLabel, Heading, Select, VStack } from '@chakra-ui/react'
 
+import toast from 'react-hot-toast';
+
 //Icons/Images Specific Stuff
 import { AiOutlineMail, AiOutlineUser } from 'react-icons/ai'
 
@@ -11,7 +13,6 @@ import { CoursesCategories, SERVER } from '../GlobalFunctions';
 //Components Specific Stuff
 import FormInput from '../components/Layout/FormInput';
 import Buttons from '../components/Layout/Buttons';
-import toast from 'react-hot-toast';
 
 const RequestCourse = () => {
 
@@ -32,8 +33,6 @@ const RequestCourse = () => {
         e.preventDefault();
 
         setLoading(true);
-
-        console.log('formDAta', formData)
 
         const { name, email, course } = formData;
 
@@ -62,8 +61,6 @@ const RequestCourse = () => {
             const res = await fetch(url, options);
             const data = await res.json();
 
-            console.log('request course ', data);
-
             if (data.success === true)
                 toast.success(data.msg);
             else
@@ -71,7 +68,6 @@ const RequestCourse = () => {
 
         } catch (error) {
             toast.error(error);
-            console.log(error);
         }
 
         setLoading(false);
@@ -94,7 +90,7 @@ const RequestCourse = () => {
 
                             <FormControl>
                                 <FormLabel>Course</FormLabel>
-                                <Select name='course' id='course' onChange={handleOnChange} value={formData.course} placeholder='Select Course'>
+                                <Select outline={'salmon'} border={'0.5px solid'} name='course' id='course' onChange={handleOnChange} value={formData.course} placeholder='Select Course'>
                                     {CoursesCategories.map((course, index) => (
                                         <option name='course' id='course' key={index} value={course} >{course}</option>)
                                     )}
@@ -103,7 +99,7 @@ const RequestCourse = () => {
                             </FormControl>
 
                             <Box w='full' cursor={'pointer'} p='2' my='4'>
-                                <Buttons type='submit' fontsize='lg' display={'block'} mx='auto' width="full" title={'Request For Course'} />
+                                <Buttons loading={loading} type='submit' fontsize='lg' display={'block'} mx='auto' width="full" title={'Request For Course'} />
                             </Box>
 
                         </VStack>

@@ -1,57 +1,54 @@
 import React, { useEffect, useState } from 'react'
 
-import { Button, Grid, HStack, Heading, Input, Stack, Text, filter } from '@chakra-ui/react'
-
+import { Button, Grid, HStack, Input, Text } from '@chakra-ui/react'
 
 //Global Function stuff
 import { CoursesCategories } from '../../GlobalFunctions';
 
-
 //Component
 import CourseCard from './CourseCard'
-import Loading from '../Layout/Loading';
 import Buttons from '../Layout/Buttons';
-import { useSelector } from 'react-redux';
+import Loading from '../Layout/Loading';
 
 const SearchBox = ({ courses }) => {
 
-    const course = useSelector(state => state.course.courses);
 
     //----------- States Specific Stuff ---------------X
     const [keyword, setKeyword] = useState(''); //used to search in title of courses
-    const [filterCourse, setFilterCourse] = useState(course || []);
+    const [filterCourse, setFilterCourse] = useState([]);
 
-    useEffect(() => {
-        setFilterCourse(courses);
-    }, []);
+    useEffect(()=> {setFilterCourse(courses)},[courses])
+
 
     //------------ Function to on change on the search bar filter data
     const handleOnChange = (e) => {
         let value = e.target.value;
-        console.log(value, e)
         setKeyword(value);
 
         value = value.toLowerCase();
 
         //Now apply filter on the title
-        // const filterData = filterCourse.filter(item =>(console.log('check item ',item,item.title)));
-        if (value.length > 3) {
+         if (value.length > 3) {
 
             const filterData = filterCourse.filter(item => item.title.includes(value));
 
             setFilterCourse(filterData);
         }
+        else setFilterCourse(courses);
+
     }
 
     //---------- During click on the categories buttons handle the filter
     const handleSelectCategory = (value) => {
-        console.log(value);
+
+        //During click on the categories buttons, then clear first filterdata
+        setFilterCourse('');
 
         //Now apply filter on the title
-        const filterData = filterCourse.filter(item => item.category === value);
+        const filterData = courses.filter(item => item.category === value);
 
         setFilterCourse(filterData);
-
+        
     }
 
     //-------------- Function to clear all the data
@@ -59,9 +56,6 @@ const SearchBox = ({ courses }) => {
         setKeyword('');
         setFilterCourse(courses);
     }
-
-    if (!filterCourse)
-        return <Loading />
 
     return (
         <>
@@ -83,9 +77,11 @@ const SearchBox = ({ courses }) => {
             </HStack>
 
             {/* Showing the cards of the courses, where we apply the filterations -----------X */}
-            <Grid templateColumns='repeat(2,1fr)' gap={4} my={'4'}>
+            <Grid templateColumns={['1fr','repeat(2,1fr)']} gap={4} my={'4'}>
 
-                {!filterCourse && <Text>No course result found</Text>}
+                {!filterCourse && <Loading />}
+
+                {filterCourse.length === 0  && <Text>No Course Result Found</Text>}
 
                 {filterCourse && filterCourse.map((item, i) => (
                     <CourseCard key={i} img={item?.poster?.url} title={item.title} description={item.description} category={item.category} lectureCount={item.totalVideos} id={item._id} />

@@ -1,17 +1,21 @@
 import React, { useState } from 'react'
 
-import { useParams } from 'react-router-dom';
-
 import { Box, Container, Heading } from '@chakra-ui/react';
+
+//--------Redux Store specific stuff
+import { useDispatch, useSelector } from 'react-redux';
+import { handleUpdateUserPassword } from '../../Store/UsersSlice';
 
 //Components Stuff
 import { FormInputPassword } from './Login';
 import Buttons from '../../components/Layout/Buttons';
-import { SERVER, Token } from '../../GlobalFunctions';
-import toast from 'react-hot-toast';
 
 
 const ChangePassword = () => {
+
+    const dispatch = useDispatch();
+
+    const { loading } = useSelector(state => state.user);
 
     //------------------ Form Specific Stuff ----------------
 
@@ -19,7 +23,6 @@ const ChangePassword = () => {
         oldpassword: '',
         newpassword: ''
     });
-    const [loading, setLoading] = useState(false);
 
     //Function to handle the onchange event on input data
     const handleOnChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,34 +30,9 @@ const ChangePassword = () => {
     //Function to change the password
     const handleChangePassword = async (e) => {
         e.preventDefault();
-        
-        setLoading(true);
 
-        //-------- Call the api to change password
-        try {
-            const url = `${SERVER}/user/changePassword`;
-            const options = {
-                method: 'PUT',
-                headers: {
-                    "Content-Type": "application/json",
-                    "auth-token": Token
-                },
-                body: JSON.stringify(formData)
-            }
+        dispatch(handleUpdateUserPassword(formData))
 
-            const res = await fetch(url, options);
-            const data = await res.json();
-
-            if (data.success === true)
-                toast.success(data.msg);
-            else toast.error(data.msg);
-
-        } catch (error) {
-            toast.error(error);
-            console.log(error)
-        }
-
-        setLoading(false);
         setFormData({ oldpassword: '', newpassword: '' })
 
     }
@@ -80,8 +58,6 @@ const ChangePassword = () => {
                     </form>
 
                 </Container>
-
-
 
             </section>
         </>

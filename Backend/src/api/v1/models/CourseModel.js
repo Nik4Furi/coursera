@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
-const { CoursesCategories } = require('../utils/AttributesTypes');
+
+const { CoursesCategories } = require('../utils/AttributesTypes'); //Categories of the courses
 
 //------------------ User schema to store the users ---------
 const CourseSchema = new mongoose.Schema({
+    
     title: { type: String, required: true, minlength: [5, "Title must be 5 char long "], maxlength: [80, "Title mustn't 150 char long"] },
 
     description: { type: String, required: true, minlength: [12, "Description must be 5 char long "], maxlength: [200, "Description mustn't 150 char long"] },
@@ -15,10 +17,7 @@ const CourseSchema = new mongoose.Schema({
         videos: {
             public_id: String, url: String,
         },
-        poster: {
-            public_id: String, url: String,
-        },
-        views: Number,
+        views: { type: Number, default: 0 },
         // isPremium : {
         //     type: Boolean,
         //     default: false

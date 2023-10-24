@@ -11,6 +11,7 @@ export const AvatarTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp'
 
 //--------------- Tokenization using the localStorage functions
 export const DayToValidate = 7*24*60*60*1000; //Validate token upto 7 day
+
 export const setWithExpiry = (key, value, ttl) => {
     const now = new Date();
 

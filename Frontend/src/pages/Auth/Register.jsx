@@ -6,12 +6,16 @@ import { Avatar, Box, Heading, VStack, Container, Text } from '@chakra-ui/react'
 
 import toast from 'react-hot-toast'
 
+//----------Store Specific Stuff
+import { useDispatch, useSelector } from 'react-redux'
+import { handleRegisterUser } from '../../Store/UsersSlice'
+
 //Icons/Images Stuff
 import { AiOutlineMail, AiOutlineUser } from 'react-icons/ai'
 import { RxAvatar } from 'react-icons/rx'
 
 //Global Functions stuff
-import { AvatarTypes, SERVER } from '../../GlobalFunctions'
+import { AvatarTypes } from '../../GlobalFunctions'
 
 //Components Stuff
 import FormInput from '../../components/Layout/FormInput'
@@ -22,6 +26,9 @@ import Buttons from '../../components/Layout/Buttons'
 const Register = () => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const {loading} = useSelector(state=>state.user);
 
     //------------------ Form Specific Stuff ----------------
 
@@ -33,8 +40,6 @@ const Register = () => {
         avatar: ''
     });
     const [imgPrev, setImgPrev] = useState('');
-    const [loading, setLoading] = useState(false);
-
 
     //Function to handle the onchange event on input data
     const handleOnChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -73,21 +78,17 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setLoading(true);
-
-        const { name, password, email, cpassword, avatar } = formData;
+        const { password, cpassword, avatar } = formData;
 
         if (password !== cpassword) {
             toast.error("Password and confirm password didn't match");
             setFormData({ ...formData, password: '', cpassword: '' })
-            setLoading(false);
             return;
         }
 
-        if (avatar === undefined || avatar === null) {
-            toast.error("Neccessary to upload avatar")
+        if (avatar === undefined || avatar === null || !avatar) {
+            toast.error("Neccessary to upload profile picture")
             setFormData({ ...formData, avatar: '' });
-            setLoading(false);
             return;
         }
 
@@ -97,36 +98,13 @@ const Register = () => {
         myForm.append('password', formData.password);
         myForm.append('cpassword', formData.cpassword);
         myForm.append('file', formData.avatar);
+     
+        dispatch(handleRegisterUser(myForm));
 
-        //-------------Now call the api to register the new user
-        try {
-            const url = `${SERVER}/user/register`;
-            const options = {
-                method: 'POST',
-                body: myForm
-            };
-
-            const res = await fetch(url, options);
-            const data = await res.json();
-
-            console.log('register ', data);
-
-            if (data.success === true) {
-                toast.success(data.msg);
-                navigate('/login');
-            }
-            else toast.error(data.msg);
-
-        } catch (error) {
-            toast.error(error);
-            console.log(error)
-            setFormData({ ...formData, password: '', cpassword: '' });
-            setLoading(false);
-            return;
-        }
-
-        setLoading(false);
+        
         setFormData({ name: '', email: '', password: '', cpassword: '', avatar: '' });
+
+        navigate('/login')
     }
     //----------------------------Form Specific Stuff   - x 
 

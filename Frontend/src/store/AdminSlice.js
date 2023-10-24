@@ -8,87 +8,104 @@ const AdminSlice = createSlice({
     name: 'admin',
     initialState: {
         users: [],
-        courses: [],
-        lectures : [],
+        stats: { Counts: {}, Profit: {}, Percentage: {}, statsData: [{}] }
     },
     reducers: {
-        
-        //-------- set the all the users, who are used our app
-        setUser(state, action) {
+        //---------------- Fetch Users Specific Stuff-------------
+        fetchUsersRequest(state) {
+            state.loading = true;
+        },
+        setUsers(state, action) {
+            state.loading = false;
+            state.success = true;
             state.users = action.payload;
         },
 
-        //Function to remove the user
-        removeUser(state,action){
-           return state.users.filter(item => item._id !== action.payload);
-        },
-
-        //------Function to changet the role of the users
-        changeUserRole(state,action){
-            state.users.map(item => {
-                if(item._id === action.payload){
-                    if(item.role === 'admin')
-                        item.role = 'user'
-                    else item.role = 'admin';
-                }
-            })
-        },
-
-        //------------- Stuff to handle the api requests
-        // Set stuff during api call
-        setLoading(state, action) {
-            state.loading = action.payload;
-        },
-
-        setSuccess(state, action) {
-            state.success = action.payload
-        },
-
-        setMsg(state, action) {
+        fetchUsersError(state, action) {
+            state.loading = false;
+            state.success = false;
             state.msg = action.payload;
         },
+        //----------------- Fetch All Users Specific Stuff----------------X
 
-        //Removing all the stuff after api call
-        removeLoading(state) {
+        //---------------- Change user role Specific Stuff-------------
+        changeUserRoleRequest(state) {
+            state.loading = true;
+        },
+        changeUserRole(state, action) {
             state.loading = false;
+            state.success = true;
+            state.msg = action.payload.msg
+            state.users = state.users.map(item => {
+                if (item._id === action.payload.id) {
+                    if (item.role === 'admin')
+                        item.role = 'user';
+                    else item.role = 'admin';
+                }
+                return item;
+            });
         },
 
-        removeSuccess(state) {
-            state.success = false;
-        },
-
-        removeMsg(state) {
-            state.msg = "";
-        },
-
-        //-------- Clear msg,success and loading stuff from the admin states
-        adminClearAll(state){
+        changeUserRoleError(state, action) {
             state.loading = false;
             state.success = false;
-            state.msg = false;
+            state.msg = action.payload;
+        },
+        //----------------- Update user role Specific Stuff----------------X
+
+        //---------------- Delete users Specific Stuff-------------
+        deleteUserRequest(state) {
+            state.loading = true;
+        },
+        deleteUser(state, action) {
+            state.loading = false;
+            state.success = true;
+            state.msg = action.payload.msg
+            state.users = state.users.filter(item => item._id !== action.payload.id)
         },
 
-        //-------------- Admin Courses Specific Stuff, to handle course specific login
-        setCourses(state,action){ //loading
-            state.courses = action.payload;
+        deleteUserError(state, action) {
+            state.loading = false;
+            state.success = false;
+            state.msg = action.payload;
+        },
+        //----------------- delete users Specific Stuff----------------X
+
+        //---------------- Dashboard Stats Specific Stuff-------------
+        dashboardStatsRequest(state) {
+            state.loading = true;
+        },
+        dashboardStats(state, action) {
+            state.loading = false;
+            state.success = true;
+            state.stats = action.payload;
         },
 
-        //---------------- Set the lectures by the admin
-        setLectures(state,action){
-            state.lectures = action.payload
-        }
+        dashboardStatsError(state, action) {
+            state.loading = false;
+            state.success = false;
+            state.msg = action.payload;
+        },
+        //----------------- Dashbaord Stats Specific Stuff----------------X
 
-        // setCourseData(state)
+
+        //-------- Clear all api stuff
+        clearAdminError(state) { //used to clear all the api stuffs
+            state.loading = null;
+            state.success = null;
+            state.msg = null;
+        },
     }
 });
 
-export const { setLoading, setMsg, setSuccess, setUser,adminClearAll,removeUser,changeUserRole,setCourses,setLectures } = AdminSlice.actions;
+export const { fetchUsersRequest, fetchUsersError, setUsers, removeUser, changeUserRole, changeUserRoleError, changeUserRoleRequest, clearAdminError, deleteUser, deleteUserError, deleteUserRequest, dashboardStats, dashboardStatsError, dashboardStatsRequest } = AdminSlice.actions;
 export default AdminSlice.reducer;
 
 //------------------ Thunk Specific Stuff
 //----------- Function to fetch the all the users who used app
-export const fetchAllUsers = () => async (dispatch, getState) => {
-    dispatch(setLoading(true))
+export const fetchAllUsers = () => async dispatch => {
+
+    dispatch(fetchUsersRequest())
 
     try {
         const url = `${SERVER}/admin/fetchAllUsers`;
@@ -101,71 +118,77 @@ export const fetchAllUsers = () => async (dispatch, getState) => {
         const res = await fetch(url, options);
         const data = await res.json();
 
-        console.log('fetch suers ',data);
+        if (data.success === true)
+            dispatch(setUsers(data.users));
 
-        if (data.success === true) {
-            dispatch(setUser(data.users));
-            dispatch(setSuccess(true));
-        }
-
-        else {
-            dispatch(setUser([]));
-            dispatch(setSuccess(false));
-        }
-
-        dispatch(setMsg(data.msg));
+        else dispatch(fetchUsersError(data.msg));
 
     } catch (error) {
-        dispatch(setSuccess(false));
-
-        dispatch(setMsg(error))
+        dispatch(fetchUsersError(error));
     }
-
-    dispatch(setLoading(false))
 }
 
 //---------- Function to change the role of the users
-export const ChangeUserRole = (id) => async dispatch => {
-    dispatch(setLoading(true))
+export const handleChangeUserRole = (id) => async dispatch => {
+    dispatch(changeUserRoleRequest(true))
 
     try {
         const url = `${SERVER}/admin/updateUserProfile/${id}`;
         const options = {
+            method: 'PUT',
             headers: {
                 "auth-token": Token
             }
-        };
+        }
+
 
         const res = await fetch(url, options);
         const data = await res.json();
 
-        console.log('change role users ', data);
+        if (data.success === true)
+            dispatch(changeUserRole({ id, msg: data.msg }));
 
-        if (data.success === true) {
-            dispatch(setSuccess(true));
-        }
-
-        else {
-            dispatch(setSuccess(false));
-        }
-
-        dispatch(setMsg(data.msg));
+        else dispatch(changeUserRoleError(data.msg));
 
     } catch (error) {
-        dispatch(setSuccess(false));
-
-        dispatch(setMsg(error))
+        dispatch(changeUserRoleError(error));
     }
 
-    dispatch(setLoading(false))
 }
 
-//---------- Function to change the role of the users
-export const DeleteUser = (id) => async dispatch => {
-    dispatch(setLoading(true))
+// ---------- Function to delet the users
+export const handleDeleteUser = (id) => async dispatch => {
+    dispatch(deleteUserRequest())
 
     try {
         const url = `${SERVER}/admin/deleteUser/${id}`;
+        const options = {
+            method: 'DELETE',
+            headers: {
+                "auth-token": Token
+            }
+        }
+
+        const res = await fetch(url, options);
+        const data = await res.json();
+
+        if (data.success === true)
+            dispatch(deleteUser({ id, msg: data.msg }));
+
+        else dispatch(deleteUserError(data.msg));
+
+    } catch (error) {
+        dispatch(deleteUserError(error))
+    }
+}
+
+//----------- Function to fetch the all the users who used app
+export const handleFetchDashboardStats = () => async dispatch => {
+
+    dispatch(dashboardStatsRequest())
+
+    try {
+        const url = `${SERVER}/admin/stats`;
         const options = {
             headers: {
                 "auth-token": Token
@@ -175,71 +198,12 @@ export const DeleteUser = (id) => async dispatch => {
         const res = await fetch(url, options);
         const data = await res.json();
 
-        console.log('delete users ', data);
+        if (data.success === true)
+            dispatch(dashboardStats(data.data));
 
-        if (data.success === true) {
-            dispatch(setSuccess(true));
-        }
-
-        else {
-            dispatch(setSuccess(false));
-        }
-
-        dispatch(setMsg(data.msg));
+        else dispatch(dashboardStatsError(data.msg));
 
     } catch (error) {
-        dispatch(setSuccess(false));
-
-        dispatch(setMsg(error))
+        dispatch(dashboardStatsError(error));
     }
-
-    dispatch(setLoading(false))
 }
-
-//---------Function to add new lecture by the admin
-export const AddNewLecture = (body) => async dispatch =>{
-
-    try {
-        
-  
-    const url = `${SERVER}/admin/addLecture`;
-    const options = {
-        headers : {
-            "auth-token" : Token
-        },
-        body : JSON.stringify(body)
-    };
-
-    const res = await fetch(url,options);
-    const data = await res.json();
-
-    console.log('add new lecture ',data);
-
-    
-
-} catch (error) {
-        
-}
-}
-
- //----------------------- Function to fetch the courses from the api
-//  const FetchCourses = ()  =>  async dispatch =>{
-//     try {
-//         const url = `${SERVER}/course/fetchcourses`;
-        
-//         const res = await fetch(url);
-//         const data = await res.json();
-
-//         console.log('fetch courses ',data);
-
-//         if(data.success === true){
-//             toast.success(data.msg);
-//         }
-//         else toast.error(data.msg);
-
-
-//     } catch (error) {
-//         toast.error(error.response.data.messsage);
-//         console.log(error.response.data.messsage);
-//     }
-// }

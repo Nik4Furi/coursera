@@ -2,49 +2,29 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    /* font-family: 'Courier New', Courier, monospace; */
-    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
 }
 
-/* Our root elements or contraints ------------------ */
-:root {
-    /* Buttons Container  */
-    --main-btn-primary: rgb(188, 61, 188);
-    --main-btn-primary-hover: rgb(174, 55, 174);
 
-    /* Text Container  */
-    --main-text-col: purple;
-}
-
-.btn-primary {
-    background: var(--main-btn-primary) !important;
-    color: white !important;
-}
-
-.btn-primary:hover {
-    background: var(--main-btn-primary-hover) !important;
-}
-
-/*---------------------- Text Container -----------------  */
-.text-highlight {
-    color: var(--main-text-col) !important;
-    font-weight: bold !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-}
-
+/* ------------------------------ About Page CSS ---------------------------  */
 #AboutMe {
     display: flex;
-    /* padding: 5px 7px; */
+    padding: 5px 10px;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    
 /*     
     background: #343F4F; */
 }
 
+#AboutMe .img {
+    width: 50%;
+}
+
 .wrapper {
     display: flex;
+    justify-content: 'center';
+    width: 50%;
     /* background: red;
-    width: 100%;
     height: 45vh; */
 }
 
@@ -105,3 +85,13 @@
         left: 0;
     }
 }
+@media screen and (min-width: 480px){
+    #AboutMe {
+        flex-direction: column-reverse;
+        justify-content: 'center';
+    }
+    .wrapper, #AbooutMe .img   {
+        width: 100%;
+    }
+}
+/* -------------------- About Page CSS -------------------X */

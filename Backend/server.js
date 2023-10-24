@@ -22,15 +22,13 @@ cloudinary.v2.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-
-
 //When use your app any json object or form fill up
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 //------------ Configure that our app is running at the brower
 app.get('/', (req, res) => {
-    res.send('Welcome in coursera');
+    res.send('Welcome In Coursera, Discover Uncertain Things');
 })
 
 //Setup our routes dependence of versions
@@ -40,9 +38,7 @@ if (Version === 'v1') {
 
     //--------- Scheduling the task in every month, that will create states
     nodeCron.schedule('0 0 0 1 * *', async () => { //every month
-        try {
-
-            
+        try {                      
             await StatsModel.create({});
 
         } catch (error) { }
@@ -50,9 +46,7 @@ if (Version === 'v1') {
 
     // const turn = async()=> {
     //     await StatsModel.create({});
-
     // }
-
     // turn();
 
     //--------------------- Routes ---------------------X
@@ -84,5 +78,4 @@ if (Version === 'v1') {
 const Server = process.env.SERVER || SERVER;
 const Port = process.env.PORT || PORT;
 
-app.listen(8000, () => console.info(`Application listen at http://localhost:8000`))
-// app.listen(Port, () => console.info(`Application listen at ${Server}:${Port}`))
+app.listen(Port, () => console.info(`Application listen at ${Server}:${Port}`))

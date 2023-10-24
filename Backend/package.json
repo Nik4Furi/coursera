@@ -1,7 +1,7 @@
 {
-  "name": "backend",
+  "name": "coursera_api",
   "version": "1.0.0",
-  "description": "Its a backend_api of our coursera app, help of this api can controlling your structuring of your app, and build your app optimally, may be make changes you can made in future",
+  "description": "Its a backend part of our coursera app, help of this api can controlling your structuring of your app, and build your app optimally, may be make changes you can made in future",
   "main": "server",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

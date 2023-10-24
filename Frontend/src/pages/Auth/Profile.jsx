@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Link } from 'react-router-dom'
 
@@ -18,39 +18,41 @@ import toast from 'react-hot-toast';
 //Global Function Stuff
 import { AvatarTypes, SERVER, Token } from '../../GlobalFunctions';
 
+//------------Redux store specific stuff
+import { useDispatch, useSelector } from 'react-redux';
+import { handleCancelSubscription, handleCourseRemoveToPlaylist, handleFetchUserCoursePlaylist, updateProfilePicture } from '../../Store/UsersSlice';
+
 //Icons/Images Specific Stuff
 import { AiTwotoneDelete } from 'react-icons/ai'
 import { RxAvatar } from 'react-icons/rx'
-import demo from '../../assets/images/header.jpg'
 
 //Components Stuff
 import Buttons from '../../components/Layout/Buttons';
 import { FileUpload } from './Register';
 import FormInput from '../../components/Layout/FormInput';
-import { useSelector } from 'react-redux';
+import Loading from '../../components/Layout/Loading';
 
 
-const Profile = ({user}) => {
+const Profile = () => {
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const dispatch = useDispatch();
+
+    const { playlist, loading, user } = useSelector(state => state.user);
+
+    useEffect(() => {
+        dispatch(handleFetchUserCoursePlaylist());
+    }, [dispatch]);
 
 
-    // const [subscribe, setSubscribe] = useState(true);
-
-    //-------------- Function to remove the course from playlist
-    const handleDeleteCourse = async(id)=>{
-        //Call the api to delete the course from playlist
-        try {
-            // const url = 
-        } catch (error) {
-            
-        }
-        console.log('delete course');
+    const CancelSubscription = () => {
+        dispatch(handleCancelSubscription());
     }
-
-
-    const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
         <>
+            {!user && <Loading />}
             {/* When click on upload pictur, then trigger this file  */}
             <UploadPictureModal onClose={onClose} isOpen={isOpen} />
 
@@ -61,16 +63,16 @@ const Profile = ({user}) => {
                 <Stack p={'5'} direction={['column', 'row']} spacing={'5'} justifyContent={'center'} alignItems={'center'}>
 
                     <VStack justifyContent={'center'} align={'center'}>
-                        <Avatar size={'2xl'} src={user.user?.avatar?.url} boxShadow={'xl'} border={'1px dotted salmon'} />
+                        <Avatar size={'2xl'} src={user?.avatar?.url} boxShadow={'xl'} border={'1px dotted salmon'} />
 
                         <Buttons handleClick={onOpen} title='Update Picture' color={'gray'} variant={'body'} />
                     </VStack>
 
                     <VStack>
-                        <Text textTransform={'capitalize'} ><strong>Name: </strong>{user.user?.name}</Text>
-                        <Text><strong>Email: </strong>{user.user?.email}</Text>
+                        <Text textTransform={'capitalize'} ><strong>Name: </strong>{user?.name}</Text>
+                        <Text><strong>Email: </strong>{user?.email}</Text>
 
-                        <Text><strong>Subscription: </strong>{user.user?.subscription?.status ==='active' ? <Buttons display={'inline'} variant={'ghost'} color='red' title={'Cancel Subscription'} /> : <Buttons color={'salmon'} variant={'outline'} colorscheme='salmon' display={'inline'} title={'Subscribe'} />}</Text>
+                        <Text><strong>Subscription: </strong>{user?.subscription?.status === 'active' ? <Buttons loading={loading} handleClick={CancelSubscription} display={'inline'} variant={'ghost'} color='red' title={'Cancel Subscription'} /> : <Link to='/subscribe'> <Buttons color={'salmon'} variant={'outline'} colorscheme='salmon' display={'inline'} title={'Subscribe'} /></Link>}</Text>
 
                         <HStack my='3'>
                             <Link to='/updateprofile'>  <Buttons title='Update Profile' /> </Link>
@@ -88,13 +90,12 @@ const Profile = ({user}) => {
                         <Heading size='lg'>Playlist</Heading>
 
                         <Grid templateColumns={['1fr', 'repeat(2,2fr)']} my='2' p='2'>
-                            {(!(user.user) || !user || user?.user.length === 0 || user.user?.playlist.length === 0) && <Text>No course is available in your playlist</Text>}
+                            {(!playlist || playlist?.length === 0) && <Text>No course is available in your playlist</Text>}
 
-                            {user.user?.playlist?.map((item,index)=> (
-                                <PlaylistCard key={index}
-                                 handleDeleteCourse={handleDeleteCourse} img={item?.course.avatar?.url} title={item?.course?.title} />
+                            {playlist && playlist?.map((item, index) => (
+                                <PlaylistCard key={index} id={item._id} img={item?.poster?.url} title={item?.title} />
                             ))}
-                            
+
                         </Grid>
                     </Container>
                 </section>
@@ -108,10 +109,19 @@ export default Profile
 
 
 //-------------- Playlist Card
-export const PlaylistCard = ({ img, title,handleDeleteCourse,description }) => {
+export const PlaylistCard = ({ img, title, id, description }) => {
+
+    const dispatch = useDispatch();
+
+    //-------------- Function to remove the course from playlist
+    const handleDeleteCourse = async () => {
+        dispatch(handleCourseRemoveToPlaylist(id));
+    }
+
+
     return (
         <Box boxShadow={'dark-lg'} my={'2'} mx='2' >
-            <Image src={img} alt={title} maxH={'60%'} w={'full'} />
+            <Image src={img} alt={title} w='full' />
 
             <HStack p='3' my='3' justifyContent={'space-between'} alignItems={'center'}>
 
@@ -119,7 +129,7 @@ export const PlaylistCard = ({ img, title,handleDeleteCourse,description }) => {
 
                 <Heading size='md' textTransform={'capitalize'}  >{description}</Heading>
 
-                <Box><AiTwotoneDelete onClick={handleDeleteCourse} /> </Box>
+                <Box><AiTwotoneDelete cursor={'pointer'} onClick={handleDeleteCourse} /> </Box>
             </HStack>
         </Box>
     )
@@ -130,22 +140,19 @@ export const UploadPictureModal = ({ isOpen, onClose }) => {
 
     const [imgPrev, setImgPrev] = useState('');
     const [file, setFile] = useState('');
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const dispatch = useDispatch();
 
     //Function to handle upload image
     const handleImgChange = (e) => {
         const file = e.target.files[0];
 
         const reader = new FileReader();
-        // console.log('reader', reader);
 
         reader.readAsDataURL(file);
 
-        reader.onload = () => {
-            setImgPrev(reader.result)
-        }
-
-        // console.log(file);
+        reader.onload = () => setImgPrev(reader.result)
 
         setFile(file);
 
@@ -159,20 +166,18 @@ export const UploadPictureModal = ({ isOpen, onClose }) => {
 
         // Define the size of the image
         const fileSize = file.size / 1e+6; //mb
-        if (fileSize.toFixed(2) > 5) {
-            //Can't upload file size > 5 MB
+        if (fileSize.toFixed(2) > 5) {   //Can't upload file size > 5 MB
             toast.error("Avatar must be less than 5 MB");
             setFile('');
             return;
         }
-        // handleClose();
     }
 
     //------------ Function to upload the imag
-    const handleUploadImg = async() => {
+    const handleUploadImg = async () => {
         setLoading(true);
 
-        if(!file){
+        if (!file) {
             toast.error('File not found');
             setFile('');
             setLoading(false);
@@ -180,31 +185,32 @@ export const UploadPictureModal = ({ isOpen, onClose }) => {
         }
 
         const myForm = new FormData();
-        myForm.append('file',file);
+        myForm.append('file', file);
 
         //------------Nwo call the api to upload a avatar
         try {
             const url = `${SERVER}/user/updatePicture`;
             const options = {
-                method : 'PUT',
-                headers : {
-                    'auth-token' : Token
+                method: 'PUT',
+                headers: {
+                    'auth-token': Token
                 },
-                body : myForm
+                body: myForm
             };
-            
-            const res = await fetch(url,options);
+
+            const res = await fetch(url, options);
             const data = await res.json();
 
-            console.log('update picture ',data);
-            
-            if(data.success === true)
+            if (data.success === true) {
+
                 toast.success(data.msg);
+
+                dispatch(updateProfilePicture(data.user.avatar.url));
+            }
             else toast.error(data.msg);
 
         } catch (error) {
             toast.error(error);
-            console.log(error);
         }
         setLoading(false);
         handleClose();

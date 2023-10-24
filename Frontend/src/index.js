@@ -5,7 +5,7 @@ import App from './App';
 
 //---------- Store Configuration of react-redux
 import { Provider as ReduxProvider } from 'react-redux'
-import Store from './store/Store';
+import Store from './Store/Store';
 
 
 import { ChakraProvider, theme } from '@chakra-ui/react'

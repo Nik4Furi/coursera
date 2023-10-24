@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer")
 
 const SendMail = async (to, subject, text) => {
 
-  // try {
+  try {
 
     //Create the transporter help of nodemailer
     const transporter = nodemailer.createTransport({
@@ -18,10 +18,7 @@ const SendMail = async (to, subject, text) => {
 
     transporter.sendMail({to,subject,text});
 
-
-  // } catch (error) { throw new Error(error); }
-
-
+  } catch (error) { throw new Error(error); }
 }
 
 module.exports = SendMail;

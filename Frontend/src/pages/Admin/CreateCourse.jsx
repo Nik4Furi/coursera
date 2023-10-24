@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { FormControl, FormLabel, Select, Heading, Avatar, Textarea, Box, Image } from '@chakra-ui/react';
+import { FormControl, FormLabel, Select, Heading, Box, Image, VStack } from '@chakra-ui/react';
 
 import toast from 'react-hot-toast'
 
@@ -8,7 +8,11 @@ import toast from 'react-hot-toast'
 import AdminLayout from '../../components/Admin/AdminLayout'
 
 //Global Functions
-import { CoursesCategories,AvatarTypes, SERVER, Token } from '../../GlobalFunctions';
+import { CoursesCategories, AvatarTypes } from '../../GlobalFunctions';
+
+//------Redux store specific stuff
+import { useDispatch, useSelector } from 'react-redux';
+import { handleAddNewCourse } from '../../Store/CourseSlice';
 
 //Component Stuff
 import FormInput from '../../components/Layout/FormInput'
@@ -16,7 +20,12 @@ import { FileUpload } from '../Auth/Register';
 import { AddTextArea } from '../ContactUS';
 import Buttons from '../../components/Layout/Buttons';
 
+
 const CreateCourse = () => {
+
+    const dispatch = useDispatch();
+
+    const { loading } = useSelector(state => state.admin);
 
     //------------------ Form Specific Stuff ----------------
 
@@ -27,7 +36,6 @@ const CreateCourse = () => {
         category: ''
     });
     const [imgPrev, setImgPrev] = useState('');
-    const [loading, setLoading] = useState(false);
 
     //Function to handle the onchange event on input data
     const handleOnChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,15 +45,12 @@ const CreateCourse = () => {
         const file = e.target.files[0];
 
         const reader = new FileReader();
-        // console.log('reader', reader);
 
         reader.readAsDataURL(file);
 
         reader.onload = () => {
             setImgPrev(reader.result)
         }
-
-        // console.log(file);
 
         setFormData({ ...formData, img: file });
 
@@ -72,55 +77,31 @@ const CreateCourse = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setLoading(true);
-        console.log('formdata ', formData);
-
         const myForm = new FormData();
-        myForm.append('title',formData.title);
-        myForm.append('description',formData.description);
-        myForm.append('category',formData.category);
-        myForm.append('file',formData.img);
+        myForm.append('title', formData.title);
+        myForm.append('description', formData.description);
+        myForm.append('category', formData.category);
+        myForm.append('file', formData.img);
 
+        dispatch(handleAddNewCourse(myForm));
 
-        try {
-            const url = `${SERVER}/course/addCourse`;
-            const options = {
-                method : 'POST',
-                headers : {
-                    "auth-token" : Token
-                },
-                body : myForm
-            };
-
-            const res = await fetch(url,options);
-            const data = await res.json();
-
-            console.log('add course',data);
-
-            if(data.success === true)
-                toast.success(data.msg);
-            else toast.error(data.msg);
-
-        } catch (error) {
-            toast.error(error);
-            console.log(error);
-        }
-        setLoading(false);
-        // setFormData({title:'',description:'',category:'',img:''})
+        setFormData({ title: '', description: '', category: '', img: '' });
+        setImgPrev('');
     }
 
     return (
         <>
             <AdminLayout >
-                <section id="CreateCourses">
+                <Box >
+                {/* <section id="CreateCourses"> */}
 
-                    <Box p='3'>
+                    <VStack p='3' >
                         <Heading >Create a New Course, Now!</Heading>
 
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} style={{width:"100%"}}>
 
 
-                            <FormInput type={'text'} label={'Enter Title'} name='title' value={formData.name} handleChange={handleOnChange} minlen={5} maxlen={80} />
+                            <FormInput type={'text'} label={'Enter Title'} name='title' value={formData.title} handleChange={handleOnChange} minlen={5} maxlen={80} />
 
                             <AddTextArea label={'Enter Course Description'} name='description' minlen={12} maxlen={200} value={formData.description} handleChange={handleOnChange} placeholder={'Enter course description here'} />
 
@@ -128,10 +109,10 @@ const CreateCourse = () => {
                             <FormControl>
                                 <FormLabel>Course</FormLabel>
                                 <Select textTransform={'capitalize'} name='category'
-                                id='category'
-                                onChange={handleOnChange}
-                                value={formData.category} 
-                                placeholder='Select Course'>
+                                    id='category'
+                                    onChange={handleOnChange}
+                                    value={formData.category}
+                                    placeholder='Select Course'>
                                     {CoursesCategories.map((course, index) => (
                                         <option name='category' id='category' key={index} >{course}</option>)
                                     )}
@@ -147,14 +128,15 @@ const CreateCourse = () => {
                                     <Image src={imgPrev} boxSize={'fit-content'} />
                                 </Box>}
 
-                            <Box display={'block'} mx='auto' my='5' width={'3xl'} p='3'>
+                            <Box display={'block'} mx='auto' m='5' p='3'>
                                 <Buttons width={'full'} title={'Add Course'} type='submit' loading={loading} />
                             </Box>
 
                         </form>
 
+                    </VStack>
                     </Box>
-                </section>
+                {/* </section> */}
 
             </AdminLayout>
         </>

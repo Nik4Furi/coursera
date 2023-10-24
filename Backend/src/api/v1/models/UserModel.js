@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 //------------------ User schema to store the users ---------
 const UserSchema = new mongoose.Schema({
+    
     name: { type: String, required: true, minlength: [5, "Name must be 5 char long "], maxlength: [80, "Name mustn't 80 char long"], lowercase: true },
 
     email: {
@@ -29,9 +30,9 @@ const UserSchema = new mongoose.Schema({
 
     playlist: [],
 
-    subscription : { //used to add to a plan
-        id: String, 
-        status : String
+    subscription: { //used to add to a plan
+        id: String,
+        status: String
     }
 
 }, { timestamps: true })
