@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 //------------------ User schema to store the users ---------
 const UserSchema = new mongoose.Schema({
-    
     name: { type: String, required: true, minlength: [5, "Name must be 5 char long "], maxlength: [80, "Name mustn't 80 char long"], lowercase: true },
 
     email: {
@@ -11,7 +10,7 @@ const UserSchema = new mongoose.Schema({
                 if (!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value)))
                     throw new Error(`{VALUE} is not valid email`)
             }
-        }
+        }, unique: true
     },
 
     password: { type: String, required: true, minlength: [8, "Password must be 8 char long "], maxlength: [120, "Password mustn't 120 char long"] },
@@ -30,9 +29,9 @@ const UserSchema = new mongoose.Schema({
 
     playlist: [],
 
-    subscription: { //used to add to a plan
-        id: String,
-        status: String
+    subscription : { //used to add to a plan
+        id: String, 
+        status : String
     }
 
 }, { timestamps: true })

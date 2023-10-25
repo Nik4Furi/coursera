@@ -1,6 +1,3 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow: src/*
-Disallow: src/components/*
-Disallow: src/pages/*
-Disallow: robots.txt
+Disallow:
