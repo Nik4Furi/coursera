@@ -1,133 +1,68 @@
-# <h1 id="coursera">  </h1>
-### coursera, Describe Uncertain Things
-#### Welcome In COURSERA v1🚀
-**COURSERA**, is  platform, where users can watch the lectures in sense of the new technologies, before processed further to view lectures, they need to become a premium user. So, they can access the lectures.
-*Admin* can watch all the stats data, in manner of views, users and subscribed users data. Have the ability to perform CRUD operations on Users and Coruses.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Indexing the contents
-####   <p><a href="#badges" >Badges</a></p>
-####   <p><a href="#package" >Packages</a></p>
-####   <p><a href="#imgs" >Imaggs</a></p>
-####   <p><a href="#demo" >Demo</a></p>
-####   <p><a href="#stack" >Tech Stack</a></p>
-####   <p><a href="#runLocally" >Run Locally</a></p>
-####   <p><a href="#envVar" >Environment Variables</a></p>
-####   <p><a href="#routersRef" >Routers References</a></p>
-####   <p><a href="#features" >Features</a></p>
+## Available Scripts
 
-## <h2 id="badges" >Badges </h2>
+In the project directory, you can run:
 
+### `yarn start`
 
-![GitHub Repo stars](https://img.shields.io/github/stars/Nik4Furi/coursera?style=social) ![GitHub watchers](https://img.shields.io/github/watchers/Nik4Furi/coursera?style=social)
+Runs the app in the development mode.<br />
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-![GitHub top language](https://img.shields.io/github/languages/top/Nik4Furi/coursera)   ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Nik4Furi/coursera?style=flat-square) ![GitHub repo file count](https://img.shields.io/github/directory-file-count/Nik4Furi/coursera) 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Nik4Furi/coursera)   ![GitHub last commit](https://img.shields.io/github/last-commit/Nik4Furi/coursera)
+The page will reload if you make edits.<br />
+You will also see any lint errors in the console.
 
+### `yarn test`
 
-<a href="#coursera">Go Home </a>
+Launches the test runner in the interactive watch mode.<br />
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
+### `yarn build`
 
-## <h2 id="package" >Packages </h2>
+Builds the app for production to the `build` folder.<br />
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-<p>
-    <img src="" alt="Home" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-</p>
+The build is minified and the filenames include the hashes.<br />
+Your app is ready to be deployed!
 
-<a href="#coursera">Go Home </a>
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `yarn eject`
 
-## <h2 id="imgs" >Images Stuff </h2>
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-<p>
-    <img src="" alt="Home" width="300" />
-    <img src="" alt="Admin" width="300" />
-</p>
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-<a href="#coursera">Go Home </a>
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## <h2 id="demo" >Demo </h2>
+## Learn More
 
-<p>
-    <img src="" alt="Home" width="300" />
-    <img src="" alt="Admin" width="300" />
-</p>
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-<a href="#coursera">Go Home </a>
+To learn React, check out the [React documentation](https://reactjs.org/).
 
+### Code Splitting
 
-## <h2 id="stack" >Tech Stack </h2>
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-**Client:** React, Chakra UI
-**Server:** NodeJS, ExpressJS, MongoDB
+### Analyzing the Bundle Size
 
-<a href="#coursera">Go Home </a>
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
 
+### Making a Progressive Web App
 
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-## <h2 id="runLocally" >Run Locally </h2>
+### Advanced Configuration
 
-Clone the project
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
 
-```bash
-  git clone https://github/Nik4Furi/coursera
-```
+### Deployment
 
-Go to the project directory
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
 
-```bash
-  cd Frontend (For client side code)
-  cd Backend  (For server side code)
+### `yarn build` fails to minify
 
-```
-Install dependencies
-
-```bash
-  yarn
-```
-
-Start the Client
-
-```bash
-  yarn start
-```
-
-Start the Server
-
-```bash
-  yarn start (only run server for first time)
-  yarn dev (running server in every saving iteration)
-```
-
-<a href="#coursera">Go Home </a>
-
-## <h2 id="envVar">Environment Variables </h2>
-
-To run this project, you will need to add the following environment variables in your .env file also can see  **.env.exmaple** file, and also helping the *config file* to run locally
-
-
-<a href="#coursera">Go Home </a>
-
-
-## <h2 id="routersRef">Routers Reference </h2>
-
-To get the informantion about the routers can checkout *server.js* file
-
-## <h2 id="features">Features </h2>
-
-- Admin can see the stats data in dashboard in form of chartJS
-- Can perfomr CRUD operation on courses and users
-- Users can watch lectures, if they are subscribed users
-
-
-<a href="#coursera">Go Home </a>
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

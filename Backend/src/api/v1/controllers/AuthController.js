@@ -1,29 +1,21 @@
 //----------- Import the packages from packages, use to make strong apis -------X
 const bcrypt = require('bcryptjs'); //Convert password into hash
 const jwt = require('jsonwebtoken'); // Tokenized our users
+const UserModel = require('../models/UserModel'); //User modal
 
 const crypto = require('crypto'); //Use to ciper the tokens 
 
 const cloudinary = require('cloudinary'); //To upload files--
 
-//-------------- Model Specific Stuff
-const UserModel = require('../models/UserModel'); //User modal
-const StatsModel = require('../models/StatsModel');
-
-//------------ Config Variables -----------X
 const { JWT_SECRET_KEY, FRONTEND_URL } = require('../../config/config');
-
-//------------ Utils Specific Stuff
 const SendMail = require('../utils/SendMail');
 const getDataUri = require('../utils/DataUri');
-
+const StatsModel = require('../models/StatsModel');
 
 //------------------ Creating the AuthControllers to authenticate the users -----------X
 function AuthController() {
-
     return {
-
-        // Register the users, using POST '/api/user/register'
+        //1. Register the users, using POST '/api/user/register'
         async Register(req, res) {
 
             try {
@@ -69,7 +61,7 @@ function AuthController() {
             } catch (error) { return res.status(500).json({ success: false, msg: error }); }
         },
 
-        // Login the users, using POST '/api/user/login'
+        //2. Login the users, using POST '/api/user/login'
         async Login(req, res) {
             try {
                 //--------- Req.body content
@@ -80,18 +72,17 @@ function AuthController() {
 
                 // Check the user is not already register
                 let users = await UserModel.findOne({ email })
-                if (!users) { return res.status(401).json({ success: false, msg: "Your crenditentals is not correct" }) };
+                if (!users) { return res.status(401).json({ success: false, msg: "this crenditentals's user is not register, Plz login first" }) };
 
                 //Comparing the password of register and login user
                 let hashPassword = await bcrypt.compare(password, users.password)
-                if (!hashPassword) { return res.status(404).json({ success: false, msg: "Your credentials not correct" }) }
+                if (!hashPassword) { return res.status(404).json({ success: false, msg: "Your credentials not right, plz re-write!" }) }
 
                 // Now create the token to authorizing the users
                 const payloads = {
                     user: { id: users._id }
                 }
-                const Secret_Key = process.env.JWT_SECRET_KEY || JWT_SECRET_KEY;
-
+                const Secret_Key = process.env.JWT_SECRET_KEY || JWT_SECRET_KEY
                 const token = await jwt.sign(payloads, Secret_Key, { expiresIn: '10d' })
 
                 return res.status(200).json({ success: true, msg: 'You are successfully login', token });
@@ -99,26 +90,26 @@ function AuthController() {
             } catch (error) { return res.status(500).json({ success: false, msg: error }); }
         },
 
-        // Get the info of login user, using GET '/api/user/getUser'
+        //3. Get the info of login user, using GET '/api/user/getUser'
         async getUser(req, res) {
             try {
+                // console.log(req.user);
                 const user = req.user;
 
-                return res.status(200).json({ success: true, msg: `Welcome back ${req.user.name}`, user });
+                return res.status(200).json({ success: true, msg: 'User found successfully', user });
 
             } catch (error) { return res.status(500).json({ success: true, msg: error }); }
         },
 
-        // Change Password ,if user write old password is right!, using PUT '/api/user/changePassword'
+        //4. Change Password ,if user write old password is right!, using PUT '/api/user/changePassword'
         async changePassword(req, res) {
             try {
                 //1. Get constraint from req.body
                 const { oldpassword, newpassword } = req.body;
 
-
                 if (!oldpassword || !newpassword) return res.status(404).json({ success: false, msg: 'All fields are required' })
 
-                let user = await UserModel.findOne({ _id: req.user._id });
+                let user = req.user;
 
                 const isMatch = bcrypt.compare(oldpassword, user.password);
 
@@ -197,6 +188,8 @@ function AuthController() {
                 //2. Hash the user reset token and update
                 user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
 
+                // console.log('check reset tokens ', user.resetPasswordToken, resetToken, user.resetPasswordToken === resetToken);
+
                 //3. Define the time to reset the token
                 user.resetPasswordTokenTime = Date.now() + 15 * 60 * 60 * 1000; //15 minutes;
 
@@ -210,13 +203,13 @@ function AuthController() {
 
                 //Send the mail
                 try {
-                    await SendMail(user.email, 'Coursera Reset Password', msg);
-
+                    await SendMail(user.email, 'Coursera reset password', msg);
+                    
                 } catch (error) {
-                    // console.log(error);
+                    console.log(error);
                 }
 
-                return res.status(200).json({ success: true, msg: `Check your mail on ${user.email} to reset password` })
+                return res.status(200).json({ success: true, msg: `Check ${user.email} to reset password` })
 
             } catch (error) { return res.status(500).json({ success: false, msg: `${error}` }); }
         },
@@ -226,8 +219,8 @@ function AuthController() {
             try {
                 //Get the constraints from the user
                 const { password, cpassword } = req.body;
-                const { token } = req.params;
-
+                const {token} = req.params;
+               
                 if (password.length < 8 || cpassword.length < 8)
                     return res.status(404).json({ success: false, msg: "Password & Confirm password must be 8 char long" })
 
@@ -236,10 +229,11 @@ function AuthController() {
 
                 const hashToken = crypto.createHash('sha256').update(token).digest('hex');
 
+                // console.log('hashtoken ',hashToken);
 
                 //Find the user in according of the token 
-                const user = await UserModel.findOne({ resetPasswordToken: hashToken, resetPasswordTokenTime: { $gt: Date.now() } });
-
+                const user = await UserModel.find({ resetPasswordToken: hashToken, resetPasswordTokenTime: { $gt: Date.now() } });
+                
                 if (!user) return res.status(401).json({ success: false, msg: 'Token is expires or user is not found' });
 
 
@@ -253,29 +247,24 @@ function AuthController() {
 
                 return res.status(200).json({ success: true, msg: 'Your password is reset successfully', user });
 
-            } catch (error) { return res.status(500).json({ success: false, msg: error }); }
+            } catch (error) { return res.status(500).json({ success: false, msg:error}); }
         }
+
+
     }
 }
 
 //----------------- Watch function in mongoDb, call whenever any changes is made in any of model
-UserModel.watch().on('change', async () => {
-    try {
+UserModel.watch().on('change',async() =>{
+    const stats = await StatsModel.find().sort({createdAt:'desc'}).limit(1) //show only last one
 
-        const stats = await StatsModel.find().sort({ createdAt: 'desc' }).limit(1) //show only last one
+    // Now find users have active subscription
+    const subscription = await UserModel.find({'subscription.status' :'active'})
 
-        // Now find users have active subscription
-        const subscription = await UserModel.find({ 'subscription.status': 'active' });
+    stats[0].users = UserModel.countDocuments();
+    stats[0].subscription = subscription.length;
 
-        stats[0].users = await UserModel.countDocuments({}).exec();
-        stats[0].subscription = Number(subscription.length);
-        stats[0].createdAt = new Date(Date.now());
-
-        await stats[0].save();
-
-    } catch (error) {
-        // console.log(error, 'stats error at users');
-    }
+    await stats[0].save();
 })
 
 module.exports = AuthController;
