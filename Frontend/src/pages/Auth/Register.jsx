@@ -1,21 +1,34 @@
 import React, { useState } from 'react'
 
+import { Link, useNavigate } from 'react-router-dom'
+
 import { Avatar, Box, Heading, VStack, Container, Text } from '@chakra-ui/react'
 
+import toast from 'react-hot-toast'
 
+//----------Store Specific Stuff
+import { useDispatch, useSelector } from 'react-redux'
+import { handleRegisterUser } from '../../Store/UsersSlice'
+
+//Icons/Images Stuff
 import { AiOutlineMail, AiOutlineUser } from 'react-icons/ai'
 import { RxAvatar } from 'react-icons/rx'
 
-import TextHighlight from '../../components/Layout/TextHighlight'
+//Global Functions stuff
+import { AvatarTypes } from '../../GlobalFunctions'
+
+//Components Stuff
 import FormInput from '../../components/Layout/FormInput'
 import { FormInputPassword } from './Login'
-import toast from 'react-hot-toast'
-import { AvatarTypes } from '../../GlobalFunctions'
-import { Link } from 'react-router-dom'
 import Buttons from '../../components/Layout/Buttons'
 
 
 const Register = () => {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const {loading} = useSelector(state=>state.user);
 
     //------------------ Form Specific Stuff ----------------
 
@@ -28,24 +41,20 @@ const Register = () => {
     });
     const [imgPrev, setImgPrev] = useState('');
 
-
     //Function to handle the onchange event on input data
     const handleOnChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     //Function to handle upload image
-    const handleUploadImg = (e) => {
+    const handleChangeImg = (e) => {
         const file = e.target.files[0];
 
         const reader = new FileReader();
-        // console.log('reader', reader);
 
         reader.readAsDataURL(file);
 
         reader.onload = () => {
             setImgPrev(reader.result)
         }
-
-        // console.log(file);
 
         setFormData({ ...formData, avatar: file });
 
@@ -56,11 +65,9 @@ const Register = () => {
             return;
         }
 
-
         // Define the size of the image
         const fileSize = file.size / 1e+6; //mb
-        if (fileSize.toFixed(2) > 5) {
-            //Can't upload file size > 5 MB
+        if (fileSize.toFixed(2) > 5) {  //Can't upload file size > 5 MB
             toast.error("Avatar must be less than 5 MB");
             setFormData({ ...formData, avatar: '' });
             return;
@@ -68,17 +75,10 @@ const Register = () => {
     }
 
     //---------- Function to submit the form data or can say login the users 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log('formdata ', formData);
-
-        const { name, password, email, cpassword } = formData;
-
-        if (!name || !email || !password || !cpassword) {
-            toast.error('All fields are required');
-            return;
-        }
+        const { password, cpassword, avatar } = formData;
 
         if (password !== cpassword) {
             toast.error("Password and confirm password didn't match");
@@ -86,7 +86,25 @@ const Register = () => {
             return;
         }
 
+        if (avatar === undefined || avatar === null || !avatar) {
+            toast.error("Neccessary to upload profile picture")
+            setFormData({ ...formData, avatar: '' });
+            return;
+        }
 
+        const myForm = new FormData();;
+        myForm.append('name', formData.name);
+        myForm.append('email', formData.email);
+        myForm.append('password', formData.password);
+        myForm.append('cpassword', formData.cpassword);
+        myForm.append('file', formData.avatar);
+     
+        dispatch(handleRegisterUser(myForm));
+
+        
+        setFormData({ name: '', email: '', password: '', cpassword: '', avatar: '' });
+
+        navigate('/login')
     }
     //----------------------------Form Specific Stuff   - x 
 
@@ -103,25 +121,26 @@ const Register = () => {
                     <form style={{ minWidth: '100%' }} onSubmit={handleSubmit} my='3'>
                         <VStack >
 
-                            <FormInput type={'text'} label={'Enter Name'} icon={<AiOutlineUser />} name='name' id='name' placeholder={'John Doe'} value={formData.name} handleChange={handleOnChange} minlen={5} maxlen={80} />
+                            <FormInput type={'text'} label={'Enter Name'} icon={<AiOutlineUser />} name='name' placeholder={'John Doe'} value={formData.name} handleChange={handleOnChange} minlen={5} maxlen={80} />
 
-                            <FormInput type={'email'} label={'Enter Email'} icon={<AiOutlineMail />} name='email' id='email' placeholder={'johndoe23@gmail.com'} value={formData.email} handleChange={handleOnChange} minlen={5} maxlen={120} />
+                            <FormInput type={'email'} label={'Enter Email'} icon={<AiOutlineMail />} name='email' placeholder={'johndoe23@gmail.com'} value={formData.email} handleChange={handleOnChange} minlen={5} maxlen={120} />
 
-                            <FormInputPassword label={'Enter Password'} name={'password'} id='password' value={formData.password} handleChange={handleOnChange} />
-                            <FormInputPassword label={'Confirm Pasword'} name={'cpassword'} id='cpassword' value={formData.cpassword} handleChange={handleOnChange} />
+                            <FormInputPassword label={'Enter Password'} name={'password'} value={formData.password} handleChange={handleOnChange} />
+
+                            <FormInputPassword label={'Confirm Pasword'} name={'cpassword'} value={formData.cpassword} handleChange={handleOnChange} />
 
 
-                            <FormInput type='file' css={FileUpload} label={'Upload Your Pic'} icon={<RxAvatar />} name='avatar' id='avatar' handleChange={handleUploadImg} />
+                            <FormInput type='file' css={FileUpload} label={'Upload Your Pic'} icon={<RxAvatar />} name='avatar' handleChange={handleChangeImg} />
 
                             <Box w='full' my='4'>
-                                <Buttons handleClick={handleSubmit} fontsize='lg' display={'block'} width="full" title={'Register'} />
+                                <Buttons loading={loading} type={'submit'} fontsize='lg' display={'block'} width="full" title={'Register'} />
                             </Box>
 
 
                         </VStack>
 
                     </form>
-                    <Link to={'/login'} ><Text textAlign={'right'} variant={'ghost'}>Have Already A Account</Text> </Link>
+                    <Link to={'/login'} ><Text textAlign={'right'} textDecoration={'underline'} variant={'ghost'}>Have Already A Account</Text> </Link>
 
 
                 </Container>
@@ -130,8 +149,10 @@ const Register = () => {
     )
 }
 
-export default Register
+export default Register;
 
+
+//------------- Uploading file css
 export const FileUpload = {
     "&::file-selector-button": {
         cursor: 'pointer',

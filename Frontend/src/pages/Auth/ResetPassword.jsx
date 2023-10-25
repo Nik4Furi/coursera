@@ -1,17 +1,20 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Container, Heading } from '@chakra-ui/react';
 
 //Components Stuff
 import { FormInputPassword } from './Login';
 import Buttons from '../../components/Layout/Buttons';
+import toast from 'react-hot-toast';
+import { SERVER } from '../../GlobalFunctions';
 
 
 const ResetPassword = () => {
-    const params = useParams();
-    console.log('params ', params);
+
+    const { token } = useParams();
+    const navigate = useNavigate();
 
     //------------------ Form Specific Stuff ----------------
 
@@ -19,14 +22,54 @@ const ResetPassword = () => {
         password: '',
         cpassword: ''
     });
-
+    const [loading, setLoading] = useState(false);
 
     //Function to handle the onchange event on input data
     const handleOnChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     //Function to change the password
-    const handleChangePassword = () => {
+    const handleChangePassword = async (e) => {
+        e.preventDefault();
 
+        setLoading(true);
+
+        const { password, cpassword } = formData;
+
+        //-------Check password and cpassword
+        if (password !== cpassword) {
+            toast.error('password and confirm password not match')
+            setFormData({ password: '', cpassword: '' });
+            setLoading(false);
+            return;
+        }
+
+        //----------- Call the api to reset password
+        try {
+            const url = `${SERVER}/user/resetPassword/${token}`;
+            const options = {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            };
+
+            const res = await fetch(url, options);
+            const data = await res.json();
+
+            if (data.success === true) {
+                toast.success(data.msg);
+                navigate('/login');
+            }
+            else toast.error(data.msg);
+
+        } catch (error) {
+            toast.error(error);
+
+        }
+
+        setLoading(false);
+        setFormData({ password: '', cpassword: '' });
     }
 
     return (
@@ -37,14 +80,14 @@ const ResetPassword = () => {
 
                     <Heading >Reset Your Password</Heading>
 
-                    <form >
+                    <form onSubmit={handleChangePassword}>
 
-                        <FormInputPassword label={'Enter Password'} name={'password'} id='password' value={formData.password} handleChange={handleOnChange} />
+                        <FormInputPassword label={'Enter Password'} name={'password'} value={formData.password} handleChange={handleOnChange} />
 
-                        <FormInputPassword label={'Confirm Password'} name={'cpassword'} id='cpassword' value={formData.cpassword} handleChange={handleOnChange} />
+                        <FormInputPassword label={'Confirm Password'} name={'cpassword'} value={formData.cpassword} handleChange={handleOnChange} />
 
                         <Box p='2' my='4'>
-                            <Buttons handleClick={handleChangePassword} fontsize='lg' display={'block'}  mx='auto'  width="full" title={'Reset Password'} />
+                            <Buttons type='submit' loading={loading} fontsize='lg' display={'block'} mx='auto' width="full" title={'Reset Password'} />
                         </Box>
 
                     </form>

@@ -10,7 +10,9 @@ import Error from '../../assets/images/paymentError.png'
 //Components
 import Buttons from '../../components/Layout/Buttons'
 
+
 const PaymentError = () => {
+  
   return (
     <>
       <section id="PaymentError">

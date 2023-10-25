@@ -1,42 +1,74 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Box, Button, Grid, GridItem, Heading, Text } from '@chakra-ui/react'
 
-import IntroVideo from '../../assets/videos/intro.mp4'
+// import IntroVideo from '../../assets/videos/intro.mp4'
+import { Link, Navigate, useParams } from 'react-router-dom'
 
-const LecturePage = () => {
+//---------Redux Store specific stuff
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchLectures } from '../../Store/CourseSlice'
+import Loading from '../../components/Layout/Loading'
+import Buttons from '../../components/Layout/Buttons'
+
+const LecturePage = ({ user }) => {
+
+  const { id } = useParams();
+
+  const dispatch = useDispatch();
+
+  const [lectureNumber, setLectureNumber] = useState(0);
+
+  const { lectures, loading } = useSelector(state => state.course);
+
+  useEffect(() => {
+
+    dispatch(fetchLectures(id));
+
+  }, [dispatch, id]);
+
+  if (user?.role !== 'admin' && user?.subscription?.status !== 'active')
+    return <Navigate to='/subscribe' />
+
+
   return (
     <>
-      <section id="LecturePage">
-        <Grid minH={'90vh'} templateColumns={['1fr', '3fr 1fr']} >
+      <section id="LecturePage" style={{minHeight:'80vh',padding:'2px'}}>
+        {loading && <Loading />}
 
-          {/* Video lecture stuff, to help the users to watch */}
-          <GridItem  >
-            <video width={'100%'} controls controlsList='nodownload normoteplayback' disablePictureInPicture disableRemotePlayback src={IntroVideo} >
+        {lectures?.length === 0 && !lectures ? <><Heading size='lg' textAlign={'center'}>No lecture is avialable in this course, YET</Heading> <Link to='/'><Buttons title="Go Home" display={'block'} mx='auto' my='4' /></Link> </> :
 
-            </video>
-
-            <Box p='5'>
+          <Grid minH={'90vh'} templateColumns={['1fr', '3fr 1fr']} >
 
 
-              <Heading as={'h3'}>Lecture #1: Sample1</Heading>
-              <Heading as='h5' my='3'>Description</Heading>
-              <Text>this is description</Text>
-            </Box>
 
-          </GridItem>
+            {/* Video lecture stuff, to help the users to watch */}
+            <GridItem  >
+              <Box minW={'full'}>
+                <video width={'100%'} controls controlsList='nodownload normoteplayback' disablePictureInPicture disableRemotePlayback src={lectures?.[lectureNumber]?.videos?.url} > </video>
+              </Box>
 
-          {/* This section to show the lectures  */}
-          <GridItem p='3'>
-            <Button mx={'auto'} p='2' variant={'body'} w={'full'} display={'block'} borderBottom={'1px solid blackAplpha.300'}>
-              <Box boxShadow={'md'} id='lecture1'  >Lecture 1</Box></Button>
-            <Button mx={'auto'} w={'full'} p='2' variant={'body'} display={'block'} borderBottom={'1px solid blackAplpha.300'}>
-              <Box boxShadow={'md'} id='lecture3' >Lecture 2</Box> </Button>
-            {/* <Box boxShadow={'md'} id='lecture3' >Lecture 3</Box> */}
+              <Box p='5'>
+                <Heading textTransform={'capitalize'} size='xl'>Lecture #{lectureNumber + 1}: {lectures?.[lectureNumber]?.title}</Heading>
+                <Heading textDecoration={'overline'} size='md' my='3' py='3'>Description</Heading>
+                <Text>{lectures?.[lectureNumber]?.description}</Text>
+              </Box>
 
-          </GridItem>
+            </GridItem>
 
-        </Grid>
+            {/* This section to show the lectures  */}
+            <GridItem p='1'>
+              {
+                lectures?.map((item, i) => (
+                  <Button mx={'auto'} key={i} onClick={() => setLectureNumber(i)} p='2' variant={'ghost'} w={'full'} display={'block'} borderBottom={'1px solid blackAplpha.300'}>
+                    <Box boxShadow={'md'} id='lecture1'  >Lecture {i + 1}</Box></Button>
+                ))
+              }
+
+            </GridItem>
+
+          </Grid>
+        }
       </section>
     </>
   )

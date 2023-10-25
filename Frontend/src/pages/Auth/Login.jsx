@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 
-import {Link} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import {
     Container, VStack, FormControl,
     FormLabel,
-    FormErrorMessage,
-    FormHelperText,
     Input,
     InputGroup,
     InputRightElement,
@@ -17,16 +15,30 @@ import {
     Text,
 } from '@chakra-ui/react'
 
+import toast from 'react-hot-toast'
+
+//------------- Store Specific Stuff
+import { useDispatch, useSelector } from 'react-redux'
+import { getUser, handleLoginUser } from '../../Store/UsersSlice'
+
 //Icons/Images Specific Stuff
 import { AiOutlineMail } from 'react-icons/ai'
 import { RiLockPasswordLine } from 'react-icons/ri'
 
+
 //Components Stuff
 import Buttons from '../../components/Layout/Buttons'
 import FormInput from '../../components/Layout/FormInput'
+import TextHighlight from '../../components/Layout/TextHighlight'
 
 
 const Login = () => {
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
+
+    //------------------ Store specific stuff
+    const { loading } = useSelector(state => state.user);
 
     //------------------ Form Specific Stuff ----------------
 
@@ -35,15 +47,28 @@ const Login = () => {
         password: ''
     });
 
-
     //Function to handle the onchange event on input data
     const handleOnChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     //---------- Function to submit the form data or can say login the users 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = async (e) => {
 
-        console.log('formdata ', formData);
+        e.preventDefault()
+
+        if ((/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(formData.email)) === false) {
+            toast.error(`${formData.email} is not valid`);
+            setFormData({ ...formData, email: '' });
+            return;
+        }
+
+
+        await dispatch(handleLoginUser(formData));
+
+        dispatch(getUser());
+
+        navigate(0);
+
+        setFormData({ email: '', password: '' });
     }
 
     return (
@@ -54,21 +79,23 @@ const Login = () => {
 
                     <Heading>Welcome to  Coursera</Heading>
 
-                    <form style={{ minWidth: "100%" }}>
+                    <form onSubmit={handleSubmit} style={{ minWidth: "100%" }}>
                         <VStack>
 
                             <FormInput type={'email'} label={'Enter Email'} icon={<AiOutlineMail />} name='email' id='email' placeholder={'johndoe23@gmail.com'} value={formData.email} handleChange={handleOnChange} minlen={5} maxlen={120} />
 
                             <FormInputPassword label={'Enter Password'} name={'password'} id='password' value={formData.password} handleChange={handleOnChange} />
 
+                            <Link to='/forgetpassword' ><Text mt='-3.5' me={'-72'}  ><TextHighlight title={'Forget Password'} size='sm' /> </Text> </Link>
+
                             <Box w='full' my='4'>
-                                <Buttons handleClick={handleSubmit} fontsize='lg' display={'block'} width="full" title={'Login'} />
+                                <Buttons loading={loading} type='submit' fontsize='lg' display={'block'} width="full" title={'Login'} />
                             </Box>
 
                         </VStack>
                     </form>
 
-                    <Link to={'/register'} ><Text textAlign={'right'} variant={'ghost'}>Creating A New Account</Text> </Link>
+                    <Link to={'/register'} ><Text textAlign={'right'} textDecoration={'underline'} variant={'ghost'}>Creating A New Account</Text> </Link>
 
                 </Container>
 
@@ -81,7 +108,7 @@ export default Login
 
 
 //------------ Form controller used to store only password
-export const FormInputPassword = ({ label, name, id, handleChange, value }) => {
+export const FormInputPassword = ({ label, name, handleChange, value, outline = 'salmon', border = '0.5px solid' }) => {
 
     //Function to show data of password
     const [show, setShow] = React.useState(false)
@@ -103,7 +130,9 @@ export const FormInputPassword = ({ label, name, id, handleChange, value }) => {
                     minLength={8} maxLength={120}
                     value={value}
                     onChange={handleChange}
-                    id={id}
+                    id={name}
+                    outline={outline}
+                    border={border}
                 />
 
                 <InputRightElement width='4.5rem'>
