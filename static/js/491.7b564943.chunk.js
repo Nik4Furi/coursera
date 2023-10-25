@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkcoursera=self.webpackChunkcoursera||[]).push([[491],{19491:function(e,r,t){t.r(r);var u=t(72791),n=t(57689),a=t(59434),c=t(21187),s=t(80184);r.default=function(){var e=(0,a.I0)(),r=(0,n.s0)();return(0,u.useEffect)((function(){localStorage.removeItem("token"),e((0,c.TX)())}),[e,r]),(0,s.jsx)(s.Fragment,{})}}}]);
+//# sourceMappingURL=491.7b564943.chunk.js.map
