@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 
-import { useNavigate } from 'react-router-dom'
-
 import { Box, Container, Heading } from '@chakra-ui/react'
 
 import toast from 'react-hot-toast'

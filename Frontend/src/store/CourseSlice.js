@@ -114,8 +114,12 @@ const CourseSlice = createSlice({
             state.msg = action.payload.msg;
             state.lectures = state.lectures.filter(item => item._id !== action.payload.id);
             state.courses = state.courses.map(item => {
-                if (item._id === action.payload.course_id)
+                if (item._id === action.payload.course_id){
                     item.totalVideos -= 1;
+                    return item;
+                }
+                return item;
+                    
             })
         },
         removeLectureError(state, action) {
