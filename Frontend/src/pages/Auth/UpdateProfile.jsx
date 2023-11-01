@@ -81,8 +81,8 @@ const UpdateProfile = ({ user }) => {
 
                         <FormInput type={'email'} label={'Enter Email'} icon={<AiOutlineMail />} name='email' placeholder={'johndoe23@gmail.com'} value={formData.email} handleChange={handleOnChange} minlen={5} maxlen={120} />
 
-                        <Box p='2' my='4'>
-                            <Buttons loading={loading} type='submit' fontsize='lg' display={'block'} mx='auto' width="full" title={'Update Profile'} />
+                        <Box p='2' my='4' display={'block'} mx='auto' >
+                            <Buttons loading={loading} type='submit' fontsize='lg' width="full" title={'Update Profile'} />
                         </Box>
 
                     </form>

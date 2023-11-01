@@ -80,8 +80,8 @@ const ForgetPassword = () => {
 
                         <FormInput type={'email'} label={'Enter Email'} icon={<AiOutlineMail />} name='email' placeholder={'johndoe23@gmail.com'} value={formData.email} handleChange={handleOnChange} minlen={5} maxlen={120} />
 
-                        <Box my='4' p='2'>
-                            <Buttons type={'submit'} loading={loading} fontsize='lg' display={'block'} mx='auto' width="full" title={'Request To Forget'} />
+                        <Box my='4' p='2' display={'block'} mx='auto'>
+                            <Buttons type={'submit'} loading={loading} fontsize='lg' width="full" title={'Request To Forget'} />
                         </Box>
 
                     </form>

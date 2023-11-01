@@ -57,7 +57,7 @@ const OurRoutes = () => {
 
   const dispatch = useDispatch();
 
-  const { user, isAuthenticated, success, msg,  } = useSelector(state => state.user);
+  const { user, isAuthenticated, success, msg, } = useSelector(state => state.user);
 
   useEffect(() => { //Specific for handle users slice
 
@@ -68,12 +68,12 @@ const OurRoutes = () => {
 
     dispatch(clearUserError()); //clear all the user api stuffs
 
-  }, [dispatch,success,msg]);
+  }, [dispatch, success, msg]);
 
-  useEffect(()=>{
-    if(Token)
+  useEffect(() => {
+    if (Token)
       dispatch(getUser()); //Call the api to fetch logged in user details
-  },[dispatch])
+  }, [dispatch])
 
   return (
     <>
@@ -82,7 +82,7 @@ const OurRoutes = () => {
         <Routes>
 
           {/* Home Page  */}
-          <Route path='/' element={<Suspense fallback={<Loading />}><Layout ><Home /></Layout> </Suspense>} />
+          <Route path='/' element={<Suspense fallback={<Loading />}><Layout ><Home isAuthenticated={isAuthenticated} /></Layout> </Suspense>} />
 
           {/* Home Page  */}
           {/* <Route path='/about' element={<Suspense fallback={<Loading />}><Layout ><About /></Layout> </Suspense>} /> */}
@@ -95,10 +95,10 @@ const OurRoutes = () => {
           <Route path='/register' element={<Suspense fallback={<Loading />}><ProtectedRoute isAuthenticated={!isAuthenticated} redirect='/profile' > <Layout ><Register /></Layout></ProtectedRoute> </Suspense>} />
 
           {/* Login Page  */}
-          <Route path='/login' element={<Suspense fallback={<Loading />}><ProtectedRoute isAuthenticated={!isAuthenticated} redirect='/profile' ><Layout ><Login  /></Layout> </ProtectedRoute></Suspense>} />
+          <Route path='/login' element={<Suspense fallback={<Loading />}><ProtectedRoute isAuthenticated={!isAuthenticated} redirect='/profile' ><Layout ><Login /></Layout> </ProtectedRoute></Suspense>} />
 
           {/* Login Page  */}
-          <Route path='/logout' element={<Suspense fallback={<Loading />}> <ProtectedRoute isAuthenticated={isAuthenticated} redirect='/login'> <Layout > <Logout /></Layout> </ProtectedRoute> </Suspense>} />
+          <Route path='/logout' element={<Suspense fallback={<Loading />}> <ProtectedRoute isAuthenticated={isAuthenticated}> <Layout > <Logout /></Layout> </ProtectedRoute> </Suspense>} />
 
           {/* Forget Password Page  */}
           <Route path='/forgetpassword' element={<Suspense fallback={<Loading />}><ProtectedRoute isAuthenticated={!isAuthenticated} redirect='/profile'><Layout ><ForgetPassword /></Layout> </ProtectedRoute> </Suspense>} />

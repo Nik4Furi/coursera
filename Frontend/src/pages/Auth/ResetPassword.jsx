@@ -86,8 +86,8 @@ const ResetPassword = () => {
 
                         <FormInputPassword label={'Confirm Password'} name={'cpassword'} value={formData.cpassword} handleChange={handleOnChange} />
 
-                        <Box p='2' my='4'>
-                            <Buttons type='submit' loading={loading} fontsize='lg' display={'block'} mx='auto' width="full" title={'Reset Password'} />
+                        <Box p='2' my='4' display={'block'} mx='auto' >
+                            <Buttons type='submit' loading={loading} fontsize='lg' width="full" title={'Reset Password'} />
                         </Box>
 
                     </form>

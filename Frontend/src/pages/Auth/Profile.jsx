@@ -240,7 +240,11 @@ export const UploadPictureModal = ({ isOpen, onClose }) => {
                 </ModalBody>
 
                 <ModalFooter display={'flex'} justifyContent={'space-between'}>
-                    <Buttons loading={loading} title={'Upload Picture'} handleClick={handleUploadImg} />
+
+                    <Box w={'full'} p='2' my='4' display={'block'} mx='auto'>
+                        <Buttons loading={loading} title={'Upload Picture'} handleClick={handleUploadImg} />
+                    </Box>
+
                     <Button colorScheme='blue' mr={3} onClick={handleClose}>
                         Cancel
                     </Button>

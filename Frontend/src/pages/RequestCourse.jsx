@@ -98,8 +98,8 @@ const RequestCourse = () => {
                                 </Select>
                             </FormControl>
 
-                            <Box w='full' cursor={'pointer'} p='2' my='4'>
-                                <Buttons loading={loading} type='submit' fontsize='lg' display={'block'} mx='auto' width="full" title={'Request For Course'} />
+                            <Box w='full' cursor={'pointer'} p='2' my='4'  display={'block'} mx='auto'>
+                                <Buttons loading={loading} type='submit' fontsize='lg' width="full" title={'Request For Course'} />
                             </Box>
 
                         </VStack>

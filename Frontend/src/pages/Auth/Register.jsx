@@ -132,8 +132,8 @@ const Register = () => {
 
                             <FormInput type='file' css={FileUpload} label={'Upload Your Pic'} icon={<RxAvatar />} name='avatar' handleChange={handleChangeImg} />
 
-                            <Box w='full' my='4'>
-                                <Buttons loading={loading} type={'submit'} fontsize='lg' display={'block'} width="full" title={'Register'} />
+                            <Box w='full' my='4' display={'block'} mx='auto'>
+                                <Buttons loading={loading} type={'submit'} fontsize='lg'  width="full" title={'Register'} />
                             </Box>
 
 

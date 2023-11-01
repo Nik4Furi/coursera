@@ -86,8 +86,8 @@ const ContactUS = () => {
 
                             <AddTextArea maxlen={400} minlen={10} label={'Enter Your Msg'} name='msg'  value={formData.msg} handleChange={handleOnChange} placeholder={'Enter your msg here'} />
 
-                            <Box w={'full'} p='2' my='4'>
-                                <Buttons type='submit'loading={loading} fontsize='lg' display={'block'} mx='auto' width="full" title={'Send'} />
+                            <Box w={'full'} p='2' my='4'  display={'block'} mx='auto'>
+                                <Buttons type='submit'loading={loading} fontsize='lg' width="full" title={'Send'} />
                             </Box>
 
                         </VStack>

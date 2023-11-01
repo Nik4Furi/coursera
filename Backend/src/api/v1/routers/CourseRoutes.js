@@ -8,7 +8,7 @@ const UploadFile = require('../middlewares/UploadFile'); //To upload the files
 
 //------------------ Controllers Specific Stuff-------------------------X
 const CourseController = require('../controllers/CourseController');
-
+ 
 
 //----------------------- INitizlalzing courses apis's routes here -------------------X
 //Course CRUD

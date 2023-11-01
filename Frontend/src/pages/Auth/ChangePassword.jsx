@@ -51,8 +51,8 @@ const ChangePassword = () => {
 
                         <FormInputPassword label={'Enter New Password'} name={'newpassword'} value={formData.newpassword} handleChange={handleOnChange} />
 
-                        <Box p='2' my='4'>
-                            <Buttons type='submit' loading={loading} fontsize='lg' display={'block'} mx='auto' width="full" title={'Change Password'} />
+                        <Box p='2' my='4' display={'block'} mx='auto'>
+                            <Buttons type='submit' loading={loading} fontsize='lg'  width="full" title={'Change Password'} />
                         </Box>
 
                     </form>

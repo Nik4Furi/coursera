@@ -62,12 +62,15 @@ function PaymentController() {
                 const generateSign = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET_KEY).update(body, 'utf-8').digest('hex');
 
                 if (generateSign != razorpay_signature) {
+
                     res.redirect(`${process.env.FRONTEND_URL}/paymenterror`);
                     return;
                 }
 
                 //---------Finding the users
                 const user = await UserModel.findById(user_id);
+
+                if(!user) return res.status(409).json({success:false,msg:'User not found to pay'})
 
                 user.subscription.status = 'active';
 
@@ -95,11 +98,14 @@ function PaymentController() {
                 //------------ Finding the payment data, help of subscription id
                 const payment = await PaymentModel.findOne({ razorpay_subscription_id: subscriptionId });
 
+                // console.log(subscriptionId,'subscription', 'and',payment,'payment')
+
                 if (!payment)
                     return res.status(409).json({ success: false, msg: "You didn't have subscription, please subscribe" })
 
+                // await instance.subscriptions.cancel(subscriptionId); //Cancelling the subscription
 
-                await instance.subscriptions.cancel(subscriptionId); //Cancelling the subscription
+                instance.subscriptions.cancel(subscriptionId);
 
                 //--------------- Now we start to find is refunding the payment or not
                 const gap = Date.now() - payment.createdAt;
@@ -107,13 +113,15 @@ function PaymentController() {
 
                 if (RefundDays > gap) { //7 >5
                     // refund the user payment
-                    await instance.subscriptions.refund(payment.razorpay_payment_id);
+                    // await instance.subscriptions.refund(payment.razorpay_payment_id);
+
+                    await instance.payments.refund(payment.razorpay_payment_id);
 
                     refund = true;
                 }
 
                 //-------- Removing the instances
-                await payment.deleteOne({ razorpay_subscription_id: subscriptionId });
+                await PaymentModel.deleteOne({razorpay_subscription_id : subscriptionId});
 
                 req.user.subscription.id = undefined
                 req.user.subscription.status = undefined

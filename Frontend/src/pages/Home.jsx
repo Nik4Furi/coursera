@@ -24,7 +24,7 @@ import Buttons from '../components/Layout/Buttons'
 import CoursesContainer from "../components/Home/CoursesContainer"
 
 
-function Home() {
+function Home({isAuthenticated}) {
 
 
   const dispatch = useDispatch();
@@ -62,7 +62,8 @@ function Home() {
 
               <Box >
                 <a href='#Courses' ><Buttons title='Explore Courses' /></a>
-                <Link to={'/login'}><Buttons title='Login' /></Link>
+                {isAuthenticated ? <Link to={'/profile'}><Buttons title='Profile' /></Link> :
+                <Link to={'/login'}><Buttons title='Login' /></Link>}
               </Box>
 
             </VStack>

@@ -36,7 +36,7 @@ const LecturePage = ({ user }) => {
       <section id="LecturePage" style={{minHeight:'80vh',padding:'2px'}}>
         {loading && <Loading />}
 
-        {lectures?.length === 0 && !lectures ? <><Heading size='lg' textAlign={'center'}>No lecture is avialable in this course, YET</Heading> <Link to='/'><Buttons title="Go Home" display={'block'} mx='auto' my='4' /></Link> </> :
+        {(lectures?.length === 0 || !lectures) ? <><Heading size='lg' textAlign={'center'}>No lecture is avialable in this course, YET</Heading> <Link to='/'><Buttons title="Go Home" display={'block'} mx='auto' my='4' /></Link> </> :
 
           <Grid minH={'90vh'} templateColumns={['1fr', '3fr 1fr']} >
 

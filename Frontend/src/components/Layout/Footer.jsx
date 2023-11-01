@@ -20,7 +20,8 @@ const Footer = () => {
 
             <VStack textAlign={['center','left']}>
               <Text> <TextHighlight title={'Coursera'} /> Discover Uncertain Things</Text>
-              <Text fontSize={'sm'}>Coursera is help the users to learn new technologies with practical stuff, so keep connect and <Text textTransform={'uppercase'}> <TextHighlight title={'subscribe'} /> </Text></Text>
+
+              <Text fontSize={'sm'}>Coursera is help the users to learn new technologies with practical stuff, so keep connect and <TextHighlight title={'subscribe'} /> </Text>
             </VStack>
 
             {/* Social Media Links to connect with us  */}

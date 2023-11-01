@@ -42,7 +42,7 @@ function Header() {
   return (
     <>
       <section id="Header">
-        <Box bg={'blackAlpha.300'} w={'100%'} position={'relative'} mb='5' zIndex={100} h='16'>
+        <Box bg={'blackAlpha.300'} position={'relative'} mb='5' zIndex={100} h='16'>
           <ColorModeSwitcher />
 
           {/* Arrow to switch out the side bar  */}

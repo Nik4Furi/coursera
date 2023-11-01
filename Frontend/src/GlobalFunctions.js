@@ -1,8 +1,8 @@
 //---------------- Here we create the global functions are which are used in distinct way----X
 
 //------------------ Server api configurations variable
-export const SERVER = process.env.REACT_APP_SERVER_API;
-
+export const SERVER = process.env.REACT_APP_SERVER_API || "http://localhost:8000/api";
+// console.log(SERVER, process.env.REACT_APP_SERVER_API);
 //------------- Set the categories of the keywords, to show
 export const CoursesCategories = ['web development', 'backend', 'frontend', 'app development', 'machine learning', 'artificial intelligence'];
 

@@ -44,7 +44,7 @@ const UserSlice = createSlice({
         },
         logoutUser(state) {
             state.isAuthenticated = false;
-            state.user = {};
+            state.user = null;
             state.token = null;
         },
         getUserError(state, action) {
@@ -224,6 +224,9 @@ export const handleLoginUser = (formData) => async dispatch => {
             setWithExpiry('token', data.token, DayToValidate);
 
             dispatch(loginUser({ token: data.token, msg: data.msg }));
+
+            if(Token)
+                dispatch(getUser());
         }
         else dispatch(loginUserError(data.msg));
 

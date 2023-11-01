@@ -21,19 +21,35 @@ const Subscription = () => {
   const dispatch = useDispatch();
   const [key, setKey] = useState('');
 
-  const { user,subscription,loading } = useSelector(state => state.user);
+  const { user, loading } = useSelector(state => state.user);
+
+  //--------------- Function to pay for the subscription
+  const handlePaySubscription = async () => {
+
+    const res = await fetch(`${SERVER}/payment/getSecretKey`, {
+      headers: {
+        'auth-token': Token
+      }
+    });
+    const data = await res.json();
+
+    setKey(data.secretKey);
+
+    dispatch(handleSubscription());
+  }
+
 
   useEffect(() => {
 
-    if (subscription?.id) {
-
+    if (user?.subscription?.id) {
+      //---------function to open modal to pay by the user
       const openPopUp = () => {
         var options = {
           "key": key, // Enter the Key ID generated from the Dashboard
           "currency": "INR",
           "name": "Coursera", //your business name
           "description": "Become a premium member of Coursera",
-          "subscription_id": subscription?.id,
+          "subscription_id": user?.subscription?.id,
           // "image": "https://example.com/your_logo",
           // "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
           "callback_url": `${SERVER}/payment/paymentVerification?user_id=${user?._id}`,
@@ -52,41 +68,29 @@ const Subscription = () => {
 
         const razor = new window.Razorpay(options);
         razor.open();
-
       }
 
       openPopUp();
     }
-  }, [dispatch, subscription?.id, setKey,key,user?.email,user?.name,user?._id]);
 
-  //--------------- Function to pay for the subscription
-  const handlePaySubscription = async () => {
 
-    const res = await fetch(`${SERVER}/payment/getSecretKey`, {
-      headers: {
-        'auth-token': Token
-      }
-    });
-    const data = await res.json();
+  }, [dispatch, user?.subscription?.id, setKey, key, user?.email, user?.name, user?._id]);
 
-    setKey(data.secretKey);
 
-    dispatch(handleSubscription());
-
-  }
-
-  if(user?.subscription?.status === 'active')
+  if (user?.subscription?.status === 'active')
     return <Navigate to='/profile' />
+
+  // if()
 
   return (
     <>
-      <section id="Subscription" style={{ minHeight: '60vh',padding:'10px' }}>
+      <section id="Subscription" style={{ minHeight: '60vh', padding: '10px' }}>
 
         {loading && <Loading />}
 
         <Heading textAlign={'center'}>Become A Pro Pack Member</Heading>
 
-        <VStack  boxShadow={'dark-lg'} justifyContent={'center'} alignItems={'center'} width={['100%','50%']} my={'4'} mx={['5','auto']} spacing={'5'} >
+        <VStack boxShadow={'dark-lg'} justifyContent={'center'} alignItems={'center'} width={['100%', '50%']} my={'4'} mx={['5', 'auto']} spacing={'5'} >
 
           <Box bg='blackAlpha.50' boxShadow={'sm'} w={'full'} p={'3'} >Pro Pack* <strong>299</strong></Box>
 
@@ -96,7 +100,10 @@ const Subscription = () => {
 
             <Heading my='2'>&#x20B9;299 Only</Heading>
 
-            <Buttons handleClick={handlePaySubscription} title='Buy Now' />
+            <Box w={'full'} p='2' my='4' display={'block'} mx='auto'>
+              <Buttons handleClick={handlePaySubscription} title='Buy Now' />
+            </Box>
+
 
           </Box>
           <Box bg={'blackAlpha.200'} w='full' p='3'>

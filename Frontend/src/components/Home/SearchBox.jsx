@@ -17,7 +17,7 @@ const SearchBox = ({ courses }) => {
     const [keyword, setKeyword] = useState(''); //used to search in title of courses
     const [filterCourse, setFilterCourse] = useState([]);
 
-    useEffect(()=> {setFilterCourse(courses)},[courses])
+    useEffect(() => { setFilterCourse(courses) }, [courses])
 
 
     //------------ Function to on change on the search bar filter data
@@ -28,7 +28,7 @@ const SearchBox = ({ courses }) => {
         value = value.toLowerCase();
 
         //Now apply filter on the title
-         if (value.length > 3) {
+        if (value.length > 3) {
 
             const filterData = filterCourse.filter(item => item.title.includes(value));
 
@@ -48,7 +48,7 @@ const SearchBox = ({ courses }) => {
         const filterData = courses.filter(item => item.category === value);
 
         setFilterCourse(filterData);
-        
+
     }
 
     //-------------- Function to clear all the data
@@ -77,12 +77,13 @@ const SearchBox = ({ courses }) => {
             </HStack>
 
             {/* Showing the cards of the courses, where we apply the filterations -----------X */}
-            <Grid templateColumns={['1fr','repeat(2,1fr)']} gap={4} my={'4'}>
 
-                {!filterCourse && <Loading />}
 
-                {filterCourse.length === 0  && <Text>No Course Result Found</Text>}
+            {!filterCourse && <Loading />}
 
+            {filterCourse.length === 0 && <Text>No Course Result Found</Text>}
+
+            <Grid templateColumns={['1fr', '1fr 1fr']} gap={4} my={'4'}>
                 {filterCourse && filterCourse.map((item, i) => (
                     <CourseCard key={i} img={item?.poster?.url} title={item.title} description={item.description} category={item.category} lectureCount={item.totalVideos} id={item._id} />
                 ))}

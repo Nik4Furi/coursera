@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Link, useNavigate } from 'react-router-dom'
+import { Link} from 'react-router-dom'
 
 import {
     Container, VStack, FormControl,
@@ -30,12 +30,12 @@ import { RiLockPasswordLine } from 'react-icons/ri'
 import Buttons from '../../components/Layout/Buttons'
 import FormInput from '../../components/Layout/FormInput'
 import TextHighlight from '../../components/Layout/TextHighlight'
+import { Token } from '../../GlobalFunctions'
 
 
 const Login = () => {
 
     const dispatch = useDispatch()
-    const navigate = useNavigate();
 
     //------------------ Store specific stuff
     const { loading } = useSelector(state => state.user);
@@ -61,12 +61,10 @@ const Login = () => {
             return;
         }
 
+       await dispatch(handleLoginUser(formData));
 
-        await dispatch(handleLoginUser(formData));
-
-        dispatch(getUser());
-
-        navigate(0);
+        if(Token)
+            dispatch(getUser);
 
         setFormData({ email: '', password: '' });
     }
@@ -88,8 +86,8 @@ const Login = () => {
 
                             <Link to='/forgetpassword' ><Text mt='-3.5' me={'-72'}  ><TextHighlight title={'Forget Password'} size='sm' /> </Text> </Link>
 
-                            <Box w='full' my='4'>
-                                <Buttons loading={loading} type='submit' fontsize='lg' display={'block'} width="full" title={'Login'} />
+                            <Box w='full' my='4' display={'block'} mx='auto'>
+                                <Buttons loading={loading} type='submit' fontsize='lg' width="full" title={'Login'} />
                             </Box>
 
                         </VStack>
