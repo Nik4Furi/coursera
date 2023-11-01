@@ -1,38 +1,42 @@
+import { Box, HStack, Heading, Stack, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
-
-import { Box, HStack, Stack, Text, VStack } from '@chakra-ui/react'
-
-//Icons Stuff
-import { AiFillLinkedin } from 'react-icons/ai'
-import { BsGithub } from 'react-icons/bs'
-
-//Components Stuff
 import TextHighlight from './TextHighlight'
 
+import {AiFillLinkedin} from 'react-icons/ai'
+import {BsGithub} from 'react-icons/bs'
+
+// const link = process.env.REACT_APP_FRONTEND_URI;
+const link = 'http://localhost:3000';
 
 const Footer = () => {
-
   return (
     <>
       <footer id="footer">
-        <Box padding={4} bg={'blackAlpha.100'}>
-          <Stack direction={['column', 'row']} justifyContent={['center','space-evenly']} w={'full'}>
+        <Box p={4} bg={'blackAlpha.100'}>
+                <Stack direction={['column','row']} justifyContent={'space-evenly'} w={'full'}>
 
+<<<<<<< HEAD
             <VStack textAlign={['center','left']}>
               <Text> <TextHighlight title={'Coursera'} /> Discover Uncertain Things</Text>
 
               <Text fontSize={'sm'}>Coursera is help the users to learn new technologies with practical stuff, so keep connect and <TextHighlight title={'subscribe'} /> </Text>
             </VStack>
+=======
+                    <VStack textAlign={'left'}>
+                        <span> <TextHighlight title={'Coursera'} /> Discover Uncertain Stuff</span>
+                        <Text fontSize={'sm'}>Coursera is help the users to learn new technologies with practical knowledge, so keep connect and <TextHighlight title={'subscribe'} /> US </Text>
+                    </VStack>
+                    
+                    {/* Social Media Links to connect with us  */}
+                    <HStack >
+                        <a href="https://linkedin.com/in/nik4furi" target='_blank'><AiFillLinkedin color='purple' size={'30'} /> </a>
+                        <a href="https://github.com/nik4furi" target='_blank'><BsGithub color='purple' size={'30'} /> </a>
+                    </HStack>
+>>>>>>> 18dbd310f36e03a5fd799f1d7e3484465921f77d
 
-            {/* Social Media Links to connect with us  */}
-            <HStack alignItems={'center'} justifyContent={'center'}>
-              <a href="https://linkedin.com/in/nik4furi" rel="noreferrer" target='_blank'><AiFillLinkedin color='purple' size={'30'} /> </a>
-              <a href="https://github.com/nik4furi" rel="noreferrer" target='_blank'><BsGithub color='purple' size={'30'} /> </a>
-            </HStack>
-
-
-          </Stack>
-          <Text textAlign={'center'} my={'3'}> Copyright &copy;<TextHighlight title={'coursera'} />@2023 | All rights reserved</Text>
+                
+                </Stack>
+                <Text textAlign={'center'} my={'3'}> Copyright &copy; <a href={link} target="_blank" rel="noopener noreferrer"><TextHighlight title={'coursera'} /></a>@2023 || All rights reserved</Text>
         </Box>
       </footer>
     </>

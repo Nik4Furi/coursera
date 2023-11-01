@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 
 import { Link } from 'react-router-dom'
 
-// Theme switcher
 import { ColorModeSwitcher } from '../../ColorModeSwitcher'
 
 import {
@@ -12,41 +11,37 @@ import {
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
+  DrawerCloseButton,
   Button,
   useDisclosure,
+  Input,
   Box,
   VStack,
-  HStack,
+  Stack,
 } from '@chakra-ui/react'
 
-// ---------- Redux store specific stuff
-import { useSelector } from 'react-redux'
-
-//Icons stuff
 import { RiArrowRightLine } from 'react-icons/ri'
-
-// Components Stuff
 import Buttons from './Buttons'
-
 
 
 function Header() {
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef();
-
-  const { user, isAuthenticated } = useSelector(state => state.user);
 
 
   return (
     <>
       <section id="Header">
+<<<<<<< HEAD
         <Box bg={'blackAlpha.300'} position={'relative'} mb='5' zIndex={100} h='16'>
+=======
+        <Box bg={'blackAlpha.50'} w={'100%'} position={'relative'} h='16'>
+>>>>>>> 18dbd310f36e03a5fd799f1d7e3484465921f77d
           <ColorModeSwitcher />
 
           {/* Arrow to switch out the side bar  */}
-          <Button onClick={onOpen} colorScheme='purple' position={"fixed"} top='4' left='2'  >
+          <Button onClick={onOpen} className='btn-primary' pos={"fixed"} top={"4"} left={"2"} zIndex={100} >
             <RiArrowRightLine />
           </Button>
 
@@ -59,39 +54,26 @@ function Header() {
           >
             <DrawerOverlay />
             <DrawerContent>
+              {/* <DrawerCloseButton  /> */}
               <DrawerHeader>Coursera: Discover Things 📖</DrawerHeader>
 
               <DrawerBody>
                 <VStack >
                   <Link to={'/'}><Button onClick={onClose} variant={'ghost'}>Home</Button></Link>
-                  <a href="https://github.com/nik4furi" target='_aboutme' rel="noreferrer"  ><Button onClick={onClose} variant={'ghost'}>About ME</Button></a>
                   <Link to={'/subscribe'}><Button onClick={onClose} variant={'ghost'}>Subscribe</Button></Link>
                   <Link to={'/contact'}><Button onClick={onClose} variant={'ghost'}>Contact US</Button></Link>
-                  <Link to={'/course/request'}><Button onClick={onClose} variant={'ghost'}>Request Course</Button></Link>
-
                 </VStack>
               </DrawerBody>
 
               <DrawerFooter>
-                {isAuthenticated ?
-                  <>
-                    <VStack justifyContent={['center', 'space-between']} w='full'>
-                      <HStack my='2' justifyContent={['center', 'space-evenly']} w='full' >
-
-                        <Link to={'/profile'}> <Buttons handleClick={onClose} title={'Profile'} /></Link>
-
-                        <Link to={'/logout'}> <Buttons handleClick={onClose} title={'Logout'} /></Link>
-
-                      </HStack>
-                      {user?.role === 'admin' &&
-                        <Link to={'/admin/dashboard'}> <Buttons variant={'outline'} handleClick={onClose} title={'Dashboard'} /></Link>}
-                    </VStack>
-                  </>
-                  :
+                <Stack direction={['column', 'row']} justifyContent={['center', 'space-around']} w={'full'} >
                   <Link to={'/login'}> <Buttons handleClick={onClose} title={'Login'} /></Link>
-                }
-
-
+                  <Link to={'/requestcourse'}> <Buttons handleClick={onClose} title={'Request A Course'} /></Link>
+                </Stack>
+                {/* <Button variant='outline' mr={3} onClick={onClose}>
+                  Cancel
+                </Button> */}
+                {/* <Button colorScheme='blue'>Save</Button> */}
               </DrawerFooter>
             </DrawerContent>
           </Drawer>

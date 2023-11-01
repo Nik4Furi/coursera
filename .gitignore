@@ -1,7 +1,4 @@
-
-# Secret Configuration
-.env
-Backend/.env
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
 node_modules
@@ -13,7 +10,6 @@ coverage
 
 # production
 build
-lib
 
 # misc
 .DS_Store
@@ -25,3 +21,8 @@ lib
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+# Secret Configuration
+.env
+Backend/.env

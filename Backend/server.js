@@ -9,8 +9,8 @@ const express = require('express')
 const app = express();
 const nodeCron = require('node-cron'); //used to schedule the task
 
-const cors = require('cors'); //When your app's api connect with the forntend applications
-app.use(cors())
+// const cors = require('cors'); //When your app's api connect with the forntend applications
+// app.use(cors())
 
 //------------------ Configuring the Cloudinary to upload poster and videos
 const cloudinary = require('cloudinary');
@@ -22,13 +22,15 @@ cloudinary.v2.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
+
+
 //When use your app any json object or form fill up
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 //------------ Configure that our app is running at the brower
 app.get('/', (req, res) => {
-    res.send('Welcome In Coursera, Discover Uncertain Things');
+    res.send('Welcome in coursera');
 })
 
 //Setup our routes dependence of versions
@@ -38,7 +40,9 @@ if (Version === 'v1') {
 
     //--------- Scheduling the task in every month, that will create states
     nodeCron.schedule('0 0 0 1 * *', async () => { //every month
-        try {                      
+        try {
+
+            
             await StatsModel.create({});
 
         } catch (error) { }
@@ -46,7 +50,9 @@ if (Version === 'v1') {
 
     // const turn = async()=> {
     //     await StatsModel.create({});
+
     // }
+
     // turn();
 
     //--------------------- Routes ---------------------X
@@ -69,10 +75,6 @@ if (Version === 'v1') {
     //Payment Routes
     const PaymentRoutes = require('./src/api/v1/routers/PaymentRoutes')
     app.use('/api/payment', PaymentRoutes)
-
-    //Payment Routes
-    const OtherRoutes = require('./src/api/v1/routers/OtherRoutes')
-    app.use('/api', OtherRoutes)
 }
 
 const Server = process.env.SERVER || SERVER;

@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
-import { Button, Grid, HStack, Input, Text } from '@chakra-ui/react'
+import { Button, Grid, HStack, Input, Stack, Text } from '@chakra-ui/react'
 
-//Global Function stuff
 import { CoursesCategories } from '../../GlobalFunctions';
 
-//Component
-import CourseCard from './CourseCard'
-import Buttons from '../Layout/Buttons';
-import Loading from '../Layout/Loading';
+import CourseCard from './CourseCard';
 
-const SearchBox = ({ courses }) => {
-
+const SearchBox = () => {
 
     //----------- States Specific Stuff ---------------X
     const [keyword, setKeyword] = useState(''); //used to search in title of courses
+<<<<<<< HEAD
     const [filterCourse, setFilterCourse] = useState([]);
 
     useEffect(() => { setFilterCourse(courses) }, [courses])
@@ -56,27 +52,30 @@ const SearchBox = ({ courses }) => {
         setKeyword('');
         setFilterCourse(courses);
     }
+=======
+    const [category, setCategory] = useState(''); //used in to set keyword, and search course
+>>>>>>> 18dbd310f36e03a5fd799f1d7e3484465921f77d
 
     return (
         <>
             <HStack my={'5'}>
-                <Input type='search' name='keyword' id='keyword' shadow={'sm'} outlineColor={'purple.200'} value={keyword} onChange={handleOnChange} outline={'purple'} focusBorderColor='purple' borderColor={'purple.200'} placeholder='title of course ...' />
+                <Input type='search' shadow={'sm'} value={keyword} onChange={(e) => setKeyword(e.target.value)} outline={'purple'} focusBorderColor='purple' borderColor={'purple.200'} placeholder='title of course ...' />
             </HStack>
 
             {/* Now we show the set of keywords  */}
-            <HStack overflowX={"auto"} padding={'8'} sx={{ "&::--webkit-scrollbar": { display: 'none' } }} >
-                <Buttons title={'Clear All'} minW={"40"} handleClick={handleClearAll} />
+            <HStack overflowX={"auto"} padding={'8'} sx={{"&::--webkit-scrollbar":{display:'none'}}} >
 
                 {CoursesCategories.map((item, index) => (
-                    <Button onClick={() => handleSelectCategory(item)} key={index} minW={"60"} >
-                        <Text textTransform={'capitalize'} variant={"ghost"} children={item} />
+                    <Button key={index} minW={"60"} >
+                        <Text variant={"ghost"} children={item} />
                     </Button>
                 ))}
 
-
             </HStack>
 
+
             {/* Showing the cards of the courses, where we apply the filterations -----------X */}
+<<<<<<< HEAD
 
 
             {!filterCourse && <Loading />}
@@ -88,6 +87,15 @@ const SearchBox = ({ courses }) => {
                     <CourseCard key={i} img={item?.poster?.url} title={item.title} description={item.description} category={item.category} lectureCount={item.totalVideos} id={item._id} />
                 ))}
             </Grid>
+=======
+            <Grid templateColumns='repeat(2,1fr)' gap={4} my={'4'}>
+  {/* <GridItem colSpan={2} h='10' bg='tomato' />
+  <GridItem colStart={4} colEnd={6} h='10' bg='papayawhip' /> */}
+  <CourseCard />
+  <CourseCard />
+  <CourseCard />
+</Grid>
+>>>>>>> 18dbd310f36e03a5fd799f1d7e3484465921f77d
 
         </>
     )

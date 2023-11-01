@@ -1,9 +1,8 @@
+import { Heading } from '@chakra-ui/react'
 import React from 'react'
 
-import { Heading } from '@chakra-ui/react'
-
-const TextHighlight = ({ title, size = 'md', as = 'span', color = 'salmon' }) => {
-
+const TextHighlight = ({title,size='md',as='span',color='purple'}) => {
+  // console.log(as, size, colorscheme);
   return (
     <>
       <Heading as={as} size={size} color={color} >{title}</Heading>
