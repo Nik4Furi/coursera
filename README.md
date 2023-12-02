@@ -1,13 +1,13 @@
-# <h1 id="coursera">  </h1>
-### coursera, Describe Uncertain Things
+# <h1 id="coursera"> ![logo512X512](https://github.com/Nik4Furi/coursera/assets/91304976/650077f4-b03e-4773-a7ab-58baaf905333)</h1>
+### Coursera, Describe Uncertain Things
 #### Welcome In COURSERA v1🚀
-**COURSERA**, is  platform, where users can watch the lectures in sense of the new technologies, before processed further to view lectures, they need to become a premium user. So, they can access the lectures.
-*Admin* can watch all the stats data, in manner of views, users and subscribed users data. Have the ability to perform CRUD operations on Users and Coruses.
+**COURSERA**, is  a platform, where users can watch the lectures in the sense of the new technologies, before processing further to view lectures, they need to become a premium user. So, they can access the lectures.
+*Admin* can watch all the stats data, in the manner of views, users, and subscribed users data. Have the ability to perform CRUD operations on Users and Courses.
+
+**Live** --> [coursera](https://coursera-fhg8m8f0g-nik4furis-projects.vercel.app)
 
 ## Indexing the contents
 ####   <p><a href="#badges" >Badges</a></p>
-####   <p><a href="#package" >Packages</a></p>
-####   <p><a href="#imgs" >Imaggs</a></p>
 ####   <p><a href="#demo" >Demo</a></p>
 ####   <p><a href="#stack" >Tech Stack</a></p>
 ####   <p><a href="#runLocally" >Run Locally</a></p>
@@ -26,41 +26,11 @@
 
 <a href="#coursera">Go Home </a>
 
-
-## <h2 id="package" >Packages </h2>
-
-<p>
-    <img src="" alt="Home" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-    <img src="" alt="Admin" width="100" />
-</p>
-
-<a href="#coursera">Go Home </a>
-
-
-## <h2 id="imgs" >Images Stuff </h2>
-
-<p>
-    <img src="" alt="Home" width="300" />
-    <img src="" alt="Admin" width="300" />
-</p>
-
-<a href="#coursera">Go Home </a>
-
-
 ## <h2 id="demo" >Demo </h2>
 
 <p>
-    <img src="" alt="Home" width="300" />
-    <img src="" alt="Admin" width="300" />
+    <img src="https://github.com/Nik4Furi/coursera/assets/91304976/8deecf8b-740e-4711-8f23-dc8ef6d8c2c6" alt="Home" width="300" />
+    <img src="https://github.com/Nik4Furi/coursera/assets/91304976/47580feb-aa5a-4ee3-a6dd-a50132dbd574" alt="Admin" width="300" />
 </p>
 
 <a href="#coursera">Go Home </a>
