@@ -17,6 +17,8 @@ const Logout = () => {
 
     dispatch(logoutUser());
 
+    navigate('/')
+
   }, [dispatch, navigate]);
 
 

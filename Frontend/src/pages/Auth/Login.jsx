@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Link} from 'react-router-dom'
+import { Link,useNavigate} from 'react-router-dom'
 
 import {
     Container, VStack, FormControl,
@@ -30,12 +30,12 @@ import { RiLockPasswordLine } from 'react-icons/ri'
 import Buttons from '../../components/Layout/Buttons'
 import FormInput from '../../components/Layout/FormInput'
 import TextHighlight from '../../components/Layout/TextHighlight'
-import { Token } from '../../GlobalFunctions'
 
 
 const Login = () => {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate();
 
     //------------------ Store specific stuff
     const { loading } = useSelector(state => state.user);
@@ -61,10 +61,13 @@ const Login = () => {
             return;
         }
 
-       await dispatch(handleLoginUser(formData));
+        await dispatch(handleLoginUser(formData));
 
-        if(Token)
-            dispatch(getUser);
+        navigate(0)
+
+        dispatch(getUser);
+
+        
 
         setFormData({ email: '', password: '' });
     }
