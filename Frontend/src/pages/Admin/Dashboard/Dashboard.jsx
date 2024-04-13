@@ -4,7 +4,7 @@ import { Box, Grid, HStack, Heading, Progress, Stack, Text, VStack } from '@chak
 
 // --------- Redux store specific stuff
 import { useDispatch, useSelector } from 'react-redux'
-import { handleFetchDashboardStats } from '../../../Store/AdminSlice'
+import { handleFetchDashboardStats } from '../../../store/AdminSlice'
 
 //Admin Layout Stuff
 import AdminLayout from '../../../components/Admin/AdminLayout'

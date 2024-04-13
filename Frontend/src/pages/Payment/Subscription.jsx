@@ -4,7 +4,7 @@ import { Box, Heading, Text, VStack } from '@chakra-ui/react'
 
 //--------Redux Store Specific Stuff
 import { useDispatch, useSelector } from 'react-redux'
-import { handleSubscription } from '../../Store/UsersSlice'
+import { handleSubscription } from '../../store/UsersSlice'
 
 
 //Global Functions Stuff

@@ -12,7 +12,7 @@ import { Token } from './GlobalFunctions';
 
 //---------- Redux Store Stuff
 import { useDispatch, useSelector } from 'react-redux'
-import { clearUserError, getUser } from './Store/UsersSlice'
+import { clearUserError, getUser } from './store/UsersSlice'
 
 //----------------Pages Specific Stuff
 //Layout of all the pages

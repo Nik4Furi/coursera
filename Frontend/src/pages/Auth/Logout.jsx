@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 //Store Stuff
 import { useDispatch } from 'react-redux';
-import { logoutUser } from '../../Store/UsersSlice';
+import { logoutUser } from '../../store/UsersSlice';
 
 const Logout = () => {
 

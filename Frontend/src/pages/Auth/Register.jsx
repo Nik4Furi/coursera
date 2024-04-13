@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 
 //----------Store Specific Stuff
 import { useDispatch, useSelector } from 'react-redux'
-import { handleRegisterUser } from '../../Store/UsersSlice'
+import { handleRegisterUser } from '../../store/UsersSlice'
 
 //Icons/Images Stuff
 import { AiOutlineMail, AiOutlineUser } from 'react-icons/ai'

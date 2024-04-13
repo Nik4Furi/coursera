@@ -19,7 +19,7 @@ import toast from 'react-hot-toast'
 
 //------------- Store Specific Stuff
 import { useDispatch, useSelector } from 'react-redux'
-import { getUser, handleLoginUser } from '../../Store/UsersSlice'
+import { getUser, handleLoginUser } from '../../store/UsersSlice'
 
 //Icons/Images Specific Stuff
 import { AiOutlineMail } from 'react-icons/ai'

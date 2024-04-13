@@ -6,8 +6,8 @@ import toast from 'react-hot-toast'
 
 //---------Redux store specific stuff
 import { useDispatch, useSelector } from 'react-redux'
-import { clearCoursesError } from '../../Store/CourseSlice'
-import { clearAdminError } from '../../Store/AdminSlice'
+import { clearCoursesError } from '../../store/CourseSlice'
+import { clearAdminError } from '../../store/AdminSlice'
 
 //Admin Component Stuff
 import Sidebar from './Sidebar'

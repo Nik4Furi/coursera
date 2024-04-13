@@ -34,7 +34,7 @@ import {
 
 //Redux State Stuff
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchCourses, fetchLectures, handleAddNewLecture, handleDeleteCourse, handleRemoveLecture } from '../../Store/CourseSlice'
+import { fetchCourses, fetchLectures, handleAddNewLecture, handleDeleteCourse, handleRemoveLecture } from '../../store/CourseSlice'
 
 //Layout
 import AdminLayout from '../../components/Admin/AdminLayout'

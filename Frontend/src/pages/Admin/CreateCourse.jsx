@@ -12,7 +12,7 @@ import { CoursesCategories, AvatarTypes } from '../../GlobalFunctions';
 
 //------Redux store specific stuff
 import { useDispatch, useSelector } from 'react-redux';
-import { handleAddNewCourse } from '../../Store/CourseSlice';
+import { handleAddNewCourse } from '../../store/CourseSlice';
 
 //Component Stuff
 import FormInput from '../../components/Layout/FormInput'

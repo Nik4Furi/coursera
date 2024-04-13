@@ -4,7 +4,7 @@ import { Box, Container, Heading } from '@chakra-ui/react';
 
 //--------Redux Store specific stuff
 import { useDispatch, useSelector } from 'react-redux';
-import { handleUpdateUserPassword } from '../../Store/UsersSlice';
+import { handleUpdateUserPassword } from '../../store/UsersSlice';
 
 //Components Stuff
 import { FormInputPassword } from './Login';

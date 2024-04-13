@@ -14,7 +14,7 @@ import { SERVER, Token } from '../../GlobalFunctions'
 import Buttons from '../../components/Layout/Buttons';
 import FormInput from '../../components/Layout/FormInput';
 import { useDispatch } from 'react-redux';
-import { updateProfile } from '../../Store/UsersSlice';
+import { updateProfile } from '../../store/UsersSlice';
 
 
 const UpdateProfile = ({ user }) => {

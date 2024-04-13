@@ -10,7 +10,7 @@ import { Text, Container, Heading, Stack, VStack, Image, Box, HStack } from '@ch
 
 //--------Redux store stuff
 import { useDispatch, useSelector } from 'react-redux'
-import { clearCoursesError, fetchCourses } from '../Store/CourseSlice'
+import { clearCoursesError, fetchCourses } from '../store/CourseSlice'
 
 //-------------- Images/Icons Container----------------------X
 import Header from '../assets/images/header-3.webp'

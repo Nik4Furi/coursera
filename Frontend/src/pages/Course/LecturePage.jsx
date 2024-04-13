@@ -7,7 +7,7 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 
 //---------Redux Store specific stuff
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchLectures } from '../../Store/CourseSlice'
+import { fetchLectures } from '../../store/CourseSlice'
 import Loading from '../../components/Layout/Loading'
 import Buttons from '../../components/Layout/Buttons'
 

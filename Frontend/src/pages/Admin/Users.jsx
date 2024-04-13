@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 //------------- Redux store specific stuff
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllUsers, handleChangeUserRole, handleDeleteUser } from '../../Store/AdminSlice';
+import { fetchAllUsers, handleChangeUserRole, handleDeleteUser } from '../../store/AdminSlice';
 
 import { Box, Table, TableCaption, TableContainer, Tbody, Th, Thead, Tr, VStack, Td, HStack, Image } from '@chakra-ui/react'
 

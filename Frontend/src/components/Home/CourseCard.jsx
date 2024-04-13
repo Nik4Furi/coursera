@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 
 //-------------Store Specific Stuff
-import { handleAddToPlaylist } from '../../Store/UsersSlice';
+import { handleAddToPlaylist } from '../../store/UsersSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 //Global Functions Stuff

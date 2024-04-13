@@ -20,7 +20,7 @@ import { AvatarTypes, SERVER, Token } from '../../GlobalFunctions';
 
 //------------Redux store specific stuff
 import { useDispatch, useSelector } from 'react-redux';
-import { handleCancelSubscription, handleCourseRemoveToPlaylist, handleFetchUserCoursePlaylist, updateProfilePicture } from '../../Store/UsersSlice';
+import { handleCancelSubscription, handleCourseRemoveToPlaylist, handleFetchUserCoursePlaylist, updateProfilePicture } from '../../store/UsersSlice';
 
 //Icons/Images Specific Stuff
 import { AiTwotoneDelete } from 'react-icons/ai'
