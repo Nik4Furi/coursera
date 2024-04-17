@@ -4,7 +4,7 @@
 **COURSERA**, is  a platform, where users can watch the lectures in the sense of the new technologies, before processing further to view lectures, they need to become a premium user. So, they can access the lectures.
 *Admin* can watch all the stats data, in the manner of views, users, and subscribed users data. Have the ability to perform CRUD operations on Users and Courses.
 
-**Live** --> [coursera](https://coursera-fhg8m8f0g-nik4furis-projects.vercel.app)
+**Live** --> [coursera](https://coursera-snowy.vercel.app/)
 
 ## Indexing the contents
 ####   <p><a href="#badges" >Badges</a></p>
